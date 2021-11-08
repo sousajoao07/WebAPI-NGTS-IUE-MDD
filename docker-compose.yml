@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  mysql:
+    container_name: db
+    build:
+      context: ./.docker/
+      dockerfile: ./mysql.dockerfile
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=laravel
+      - MYSQL_PASSWORD=secret
+      - MYSQL_USER=root
+    ports:
+      - "3306:3306"
+    cap_add:
+      - SYS_NICE
+    networks:
+      - ngts_iue_dmd
+  php:
+    container_name: api
+    build:
+      context: ./.docker/
+      dockerfile: ./php.dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./api:/var/www/api"
+    depends_on:
+      - "mysql"
+    networks:
+      - ngts_iue_dmd
+networks:
+  ngts_iue_dmd:
+    driver: bridge
