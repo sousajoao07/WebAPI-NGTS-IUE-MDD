@@ -9,7 +9,7 @@ RUN apk --no-cache add \
   nginx           \
   supervisor      \
   && rm -rf /var/cache/apk/* /tmp/* \
-  && mkdir -p /etc/supervisor.d /home/dogchef/.ssh
+  && mkdir -p /etc/supervisor.d
 
 RUN apk --no-cache add \
   icu-dev           \
@@ -18,11 +18,12 @@ RUN apk --no-cache add \
   icu-libs          \
   libzip-dev        \
   libpng-dev        \
-  mysql-client      \
   freetype-dev      \
   oniguruma-dev     \
+  postgresql-dev    \
   openssh-client    \
   libjpeg-turbo-dev \
+  postgresql-client \
   && apk add --virtual build-dependencies \
   $PHPIZE_DEPS \
   libtool      \
@@ -45,7 +46,7 @@ RUN apk --no-cache add \
   calendar  \
   mbstring  \
   tokenizer \
-  pdo_mysql \
+  pdo_pgsql \
   && docker-php-source delete \
   && apk del build-dependencies \
   && rm -rf /var/cache/apk/* /tmp/*
@@ -65,8 +66,7 @@ RUN mkdir -p /run/nginx/ /var/log/supervisor /run/php/
 
 RUN sed -i "s/processes auto;/processes 1;/g" /etc/nginx/nginx.conf \
   && sed -i "s|= run|= /run/php|g" /usr/local/etc/php-fpm.conf \
-  && sed -i "s/;pid =/pid =/g" /usr/local/etc/php-fpm.conf \
-  && echo "Set disable_coredump false" >> /etc/sudo.conf
+  && sed -i "s/;pid =/pid =/g" /usr/local/etc/php-fpm.conf
 
 USER php
 

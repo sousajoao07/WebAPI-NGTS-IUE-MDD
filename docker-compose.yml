@@ -1,18 +1,17 @@
 version: "3"
 
 services:
-  mysql:
+  postgres:
     container_name: db
     build:
       context: ./.docker/
-      dockerfile: ./mysql.dockerfile
+      dockerfile: ./postgres.dockerfile
     environment:
-      - MYSQL_ROOT_PASSWORD=secret
-      - MYSQL_DATABASE=laravel
-      - MYSQL_PASSWORD=secret
-      - MYSQL_USER=root
+      - POSTGRES_DB=ngts_iue_dmd
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_USER=root
     ports:
-      - "3306:3306"
+      - "5432:5432"
     cap_add:
       - SYS_NICE
     networks:
@@ -27,7 +26,7 @@ services:
     volumes:
       - "./api:/var/www/api"
     depends_on:
-      - "mysql"
+      - "postgres"
     networks:
       - ngts_iue_dmd
 networks:

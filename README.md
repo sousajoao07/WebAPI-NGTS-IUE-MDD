@@ -1,9 +1,15 @@
 # NGTS_IUE_DMD
 
-## Start api and database
+## First time
 
 ```
 docker compose up --build
+```
+
+## Start api and database
+
+```
+docker compose up
 ```
 
 ## SSH to a docker container
@@ -14,8 +20,8 @@ docker compose up --build
 docker compose exec php bash
 ```
 
-- MySQL:
+- PostgreSQL:
 
 ```
-docker compose exec mysql bash
+docker compose exec postgres bash
 ```
