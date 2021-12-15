@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LampController;
+use App\Http\Controllers\GestureController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -21,14 +23,17 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 // Protected routes
-Route::group(['middleware' => ['auth:sanctum']], function () {
+//Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/lamp', [LampController::class, 'create']);
     Route::delete('/lamp/{id}', [LampController::class, 'delete']);
-    Route::patch('/lamp/{id}', [LampController::class, 'update']);
+    Route::put('/lamp/{id}', [LampController::class, 'update']);
     Route::get('lamp/{id}', [LampController::class, 'getLampById']);
     Route::get('lamps' , [LampController::class, 'getLamps']);
-});
+    Route::patch('lamp/{id}/ip', [LampController::class, 'postIp']);
+    Route::patch('lamp/{id}/state/{state}', [LampController::class, 'changeState']);
+    Route::post('/gesture', [GestureController::class, 'create']);
+    //});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

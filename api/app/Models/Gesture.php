@@ -5,15 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Lamp extends Model
+class Gesture extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
-        'state',
-        'mac_address',
-        'ip',
-        'bulb_id'
+        'action',
     ];
 }
