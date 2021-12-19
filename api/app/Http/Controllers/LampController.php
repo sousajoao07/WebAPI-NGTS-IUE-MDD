@@ -7,6 +7,9 @@ use Illuminate\Http\Response;
 use App\Models\Lamp;
 use App\Http\Resources\LampResource;
 use Illuminate\Support\Facades\Validator;
+use Hhxsv5\SSE\SSE;
+use Hhxsv5\SSE\Event;
+use Hhxsv5\SSE\StopSSEException;
 
 class LampController extends Controller
 {
@@ -14,16 +17,20 @@ class LampController extends Controller
     //app yeelight criar a lampada, obter o ip manualmente
     //criar lampada inserindo esse ip
     //evento despuletado no rasp para ele conhecer a lampada
-
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         $fields = $request->validate([
-            'ip'=>'required|string',
-        ]);
+                'ip' => 'required|string',
+            ]);
 
-        $lamp = Lamp::create([
-            'state' => 'on',
-            'ip'=> $fields['ip']
-        ]);
+        if (isset($fields['bulb_id'])) {
+            $lamp = Lamp::updateOrCreate(
+                ['bulb_id' =>  $fields['bulb_id']],
+                ['ip' => $fields['ip']]
+            );
+        } else {
+            $lamp = Lamp::create(['ip' => $fields['ip']]);
+        }
 
         $response = [
             'lamp' => $lamp,

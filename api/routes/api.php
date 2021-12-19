@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LampController;
 use App\Http\Controllers\GestureController;
-
+use App\Http\Controllers\SyncController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,7 +34,9 @@ Route::post('/login', [AuthController::class, 'login']);
     Route::patch('lamp/{id}/state/{state}', [LampController::class, 'changeState']);
     Route::post('/gesture', [GestureController::class, 'create']);
     Route::get('/gesture/{name}', [GestureController::class, 'getActionByGestureName']);
-    //});
+    Route::get('/sync/gestures', [SyncController::class, 'gestures']);
+    Route::get('/sync/lamps', [SyncController::class, 'lamps']);
+//});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

@@ -16,7 +16,15 @@ class CreateGesturesTable extends Migration
         Schema::create('gestures', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('action',['ligar','desligar', 'diminuiluz', 'aumentaluz', 'avancacor', 'recuacor', 'comecadisco']);
+            $table->enum('action', [
+                'turn_on',
+                'turn_off',
+                'increase_light',
+                'decrease_light',
+                'next_color',
+                'previous_color',
+                'disco_flow'
+            ]);
             $table->timestamps();
         });
     }

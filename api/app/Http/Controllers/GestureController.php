@@ -34,7 +34,7 @@ class GestureController extends Controller
         $gesture = Gesture::findOrFail($id)->fill($request->all());
         $gesture->save();
         
-        return response($lamp, 202);
+        return response($gesture, 202);
     }
 
     public function getActionByGestureName($name){
