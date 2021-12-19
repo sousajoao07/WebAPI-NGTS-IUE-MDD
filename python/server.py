@@ -18,7 +18,7 @@ def sensorCheck():
     from lamp import discover
 
     try:
-        print("\nGesture Sensor Test Program ...\n")
+        print("\nGesture Sensor\n")
         discover(DATABASE)
         while True:
             sleep(0.05)
@@ -32,6 +32,8 @@ def SSEClient(table, bulkInsert):
     from json import loads
 
     try:
+        print("\nSync Table: " + table + "\n")
+
         response = sync(API_ENDPOINT, table)
         client = SSEClient(response)
         for event in client.events():
@@ -56,4 +58,5 @@ if __name__ == '__main__':
         p2.join()
         p3.join()
     except KeyboardInterrupt:
+        print()
         pass

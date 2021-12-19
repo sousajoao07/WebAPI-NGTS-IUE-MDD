@@ -250,34 +250,32 @@ class PAJ7620U2(object):
 
                 gesture = [g for g in self.__gestures if g.name == name]
 
-                if not gesture:
-                    print('No Gestures')
-                else:
+                if gesture:
                     action = gesture[0].action
 
                     if action == 'turn_on':
-                        print(action + "\t->\tTurn On\r\n")
+                        print(name + "\t->\tTurn On\r\n")
                         bulb.turn_on()
                     elif action == 'turn_off':
-                        print(action + "\t->\tTurn Off\r\n")
+                        print(name + "\t->\tTurn Off\r\n")
                         bulb.turn_off()
                     elif action == 'increase_light':
-                        print(action + "\t->\tIncrease Light\r\n")
+                        print(name + "\t->\tIncrease Light\r\n")
                         self.change_light(bulb, 25)
                     elif action == 'decrease_light':
-                        print(action + "\t->\tDecrease Light\r\n")
+                        print(name + "\t->\tDecrease Light\r\n")
                         self.change_light(bulb, -25)
                     elif action == 'next_color':
-                        print(action + "\t->\tNextColor\r\n")
+                        print(name + "\t->\tNextColor\r\n")
                         self.change_color(bulb, 1)
                     elif action == 'previous_color':
-                        print(action + "\t->\tPrevious Color\r\n")
+                        print(name + "\t->\tPrevious Color\r\n")
                         self.change_color(bulb, -1)
                     elif action == 'disco_flow':
                         from yeelight.transitions import disco
                         from yeelight import Flow
 
-                        print(action + "\t->\tDisco Flow\r\n")
+                        print(name + "\t->\tDisco Flow\r\n")
                         if self.__color == False:
                             bulb.start_flow(Flow(count=0, transitions=disco()))
                         else:
@@ -285,7 +283,8 @@ class PAJ7620U2(object):
                         self.__color = not self.__color
         else:
             self.__gestures = allGestures(self.__database)
-            print('No Gestures')
+            print("\nLoading gestures for the first time...\n")
+            self.do_action(name)
 
     def check_gesture(self):
         Gesture_Data = self._read_u16(self.PAJ_INT_FLAG1)
