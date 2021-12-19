@@ -6,20 +6,23 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Lamp;
 use App\Http\Resources\LampResource;
+use Illuminate\Support\Facades\Validator;
 
 class LampController extends Controller
 {
+    //passos para criar:
+    //app yeelight criar a lampada, obter o ip manualmente
+    //criar lampada inserindo esse ip
+    //evento despuletado no rasp para ele conhecer a lampada
+
     public function create(Request $request){
         $fields = $request->validate([
-            'name' => 'required|string',
-            'state' => 'required|boolean',
-            'mac_address' => 'required|string',
+            'ip'=>'required|string',
         ]);
 
         $lamp = Lamp::create([
-            'name' => $fields['name'],
-            'state' => $fields['state'],
-            'mac_address' => $fields['mac_address'],
+            'state' => 'on',
+            'ip'=> $fields['ip']
         ]);
 
         $response = [
@@ -41,18 +44,27 @@ class LampController extends Controller
             'name' => 'required|string',
             'state' => 'required|boolean',
             'mac_address' => 'required|string',
+            'ip'=> 'required|string',
+            'bulb_id'=> 'required|string'
         ]);
 
         $lamp = Lamp::findOrFail($id)->fill($fields);
         $lamp->save();
-        $response = [
-            'lamp' => $lamp,
-        ];
+        
         return response($lamp, 202);
     }
 
-    public function changeState(Request $request){
+    public function changeState($id, $state){
+        if($state=="true" || $state=="false"){
+            $lamp = Lamp::findOrFail($id);
+            $lamp->state = $state;
+            $lamp->save();
+        }
+        else{
+            return response(null, 400);
+        }
 
+        return response($lamp, 200);
     }
 
     public function getLampById($id){
@@ -61,5 +73,23 @@ class LampController extends Controller
 
     public function getLamps(){
         return LampResource::collection(Lamp::all());
+    }
+
+    public function postIp(Request $request, $id)
+    {
+        $fields = $request->validate([
+            'ip' => 'required|string']   
+        );
+
+        $lamp = Lamp::findOrFail($id);
+        if($lamp) {
+            $lamp->ip = $fields['ip'];
+            $lamp->save();
+        }
+        else{
+            response(null, 400);
+        }
+
+        return response(null, 200);
     }
 }

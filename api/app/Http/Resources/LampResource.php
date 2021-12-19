@@ -15,8 +15,11 @@ class LampResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'=> $this->id,  
+            'id'=> $this->id,
+            'bulb_id'=> $this->bulb_id,
+            'ip'=>$this->ip,  
             'name'=>$this->name, 
+            'state'=>$this->state,
             'mac_address'=>$this->mac_address,
             'creared_at'=>$this->created_at,
             'updated_at'=>$this->updated_at
