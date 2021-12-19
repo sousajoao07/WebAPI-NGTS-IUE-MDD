@@ -16,34 +16,44 @@ SENSOR = None
 def sensorCheck():
     from time import sleep
     from lamp import discover
-    print("\nGesture Sensor Test Program ...\n")
-    discover(DATABASE)
-    while True:
-        sleep(0.05)
-        SENSOR.check_gesture()
+
+    try:
+        print("\nGesture Sensor Test Program ...\n")
+        discover(DATABASE)
+        while True:
+            sleep(0.05)
+            SENSOR.check_gesture()
+    except KeyboardInterrupt:
+        pass
 
 
 def SSEClient(table, bulkInsert):
     from sseclient import SSEClient
     from json import loads
 
-    response = sync(API_ENDPOINT, table)
-    client = SSEClient(response)
-    for event in client.events():
-        data = loads(event.data)
-        if data:
-            bulkInsert(DATABASE, data)
+    try:
+        response = sync(API_ENDPOINT, table)
+        client = SSEClient(response)
+        for event in client.events():
+            data = loads(event.data)
+            if data:
+                bulkInsert(DATABASE, data)
+    except KeyboardInterrupt:
+        pass
 
 
 if __name__ == '__main__':
-    DATABASE = DB()
-    SENSOR = PAJ7620U2(database=DATABASE)
-    p1 = Process(target=sensorCheck)
-    p1.start()
-    p2 = Process(target=SSEClient, args=('lamps', bulkInsertLamps,))
-    p2.start()
-    p3 = Process(target=SSEClient, args=('gestures', bulkInsertGestures,))
-    p3.start()
-    p1.join()
-    p2.join()
-    p3.join()
+    try:
+        DATABASE = DB()
+        SENSOR = PAJ7620U2(database=DATABASE)
+        p1 = Process(target=sensorCheck)
+        p1.start()
+        p2 = Process(target=SSEClient, args=('lamps', bulkInsertLamps,))
+        p2.start()
+        p3 = Process(target=SSEClient, args=('gestures', bulkInsertGestures,))
+        p3.start()
+        p1.join()
+        p2.join()
+        p3.join()
+    except KeyboardInterrupt:
+        pass
