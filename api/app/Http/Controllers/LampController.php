@@ -74,7 +74,7 @@ class LampController extends Controller
         return response($lamp, 200);
     }
 
-    public function changeStateForAll(){
+    public function changeStateForAll($request){
         $arrayLamps = LampResource::collection(Lamp::all());
         foreach($arrayLamps as $lamp){
             if($lamp['state'] == true){
