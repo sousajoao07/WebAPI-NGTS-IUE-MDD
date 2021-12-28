@@ -32,7 +32,7 @@ Route::post('/login', [AuthController::class, 'login']);
     Route::get('lamps' , [LampController::class, 'getLamps']);
     Route::patch('lamp/{id}/ip', [LampController::class, 'postIp']);
     Route::patch('lamp/{id}/state/{state}', [LampController::class, 'changeState']);
-    Route::post('lamp/toggleAll', [LampController::class, 'changeStateForAll']);
+    Route::get('lamp/toggleAll', [LampController::class, 'changeStateForAll']);
     Route::post('/gesture', [GestureController::class, 'create']);
     Route::get('/gesture/{name}', [GestureController::class, 'getActionByGestureName']);
     Route::get('/sync/gestures', [SyncController::class, 'gestures']);
