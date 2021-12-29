@@ -12,6 +12,5 @@ class LampsViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "Lamps"
     }
 }
