@@ -244,47 +244,50 @@ class PAJ7620U2(object):
         from lamp import all as allLamps
         from gesture import all as allGestures
 
-        if self.__gestures:
-            for lamp in allLamps(self.__database):
-                bulb = Bulb(lamp.ip)
+        try:
+            if self.__gestures:
+                for lamp in allLamps(self.__database):
+                    bulb = Bulb(lamp.ip)
 
-                gesture = [g for g in self.__gestures if g.name == name]
+                    gesture = [g for g in self.__gestures if g.name == name]
 
-                if gesture:
-                    action = gesture[0].action
+                    if gesture:
+                        action = gesture[0].action
 
-                    if action == 'turn_on':
-                        print(name + "\t->\tTurn On\r\n")
-                        bulb.turn_on()
-                    elif action == 'turn_off':
-                        print(name + "\t->\tTurn Off\r\n")
-                        bulb.turn_off()
-                    elif action == 'increase_light':
-                        print(name + "\t->\tIncrease Light\r\n")
-                        self.change_light(bulb, 25)
-                    elif action == 'decrease_light':
-                        print(name + "\t->\tDecrease Light\r\n")
-                        self.change_light(bulb, -25)
-                    elif action == 'next_color':
-                        print(name + "\t->\tNextColor\r\n")
-                        self.change_color(bulb, 1)
-                    elif action == 'previous_color':
-                        print(name + "\t->\tPrevious Color\r\n")
-                        self.change_color(bulb, -1)
-                    elif action == 'disco_flow':
-                        from yeelight.transitions import disco
-                        from yeelight import Flow
+                        if action == 'turn_on':
+                            print(name + "\t->\tTurn On\r\n")
+                            bulb.turn_on()
+                        elif action == 'turn_off':
+                            print(name + "\t->\tTurn Off\r\n")
+                            bulb.turn_off()
+                        elif action == 'increase_light':
+                            print(name + "\t->\tIncrease Light\r\n")
+                            self.change_light(bulb, 25)
+                        elif action == 'decrease_light':
+                            print(name + "\t->\tDecrease Light\r\n")
+                            self.change_light(bulb, -25)
+                        elif action == 'next_color':
+                            print(name + "\t->\tNextColor\r\n")
+                            self.change_color(bulb, 1)
+                        elif action == 'previous_color':
+                            print(name + "\t->\tPrevious Color\r\n")
+                            self.change_color(bulb, -1)
+                        elif action == 'disco_flow':
+                            from yeelight.transitions import disco
+                            from yeelight import Flow
 
-                        print(name + "\t->\tDisco Flow\r\n")
-                        if self.__color == False:
-                            bulb.start_flow(Flow(count=0, transitions=disco()))
-                        else:
-                            bulb.stop_flow()
-                        self.__color = not self.__color
-        else:
-            self.__gestures = allGestures(self.__database)
-            print("\nLoading gestures for the first time...\n")
-            self.do_action(name)
+                            print(name + "\t->\tDisco Flow\r\n")
+                            if self.__color == False:
+                                bulb.start_flow(Flow(count=0, transitions=disco()))
+                            else:
+                                bulb.stop_flow()
+                            self.__color = not self.__color
+            else:
+                self.__gestures = allGestures(self.__database)
+                print("\nLoading gestures for the first time...\n")
+                self.do_action(name)
+        except Exception:
+            pass
 
     def check_gesture(self):
         Gesture_Data = self._read_u16(self.PAJ_INT_FLAG1)

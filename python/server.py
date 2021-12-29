@@ -8,10 +8,9 @@ from sensor import PAJ7620U2
 from api import sync
 from db import DB
 
-API_ENDPOINT = "http://192.168.1.68:8080/api"
+API_ENDPOINT = "http://10.3.141.112:8080/api"
 DATABASE = None
 SENSOR = None
-
 
 def sensorCheck():
     from time import sleep
@@ -19,7 +18,7 @@ def sensorCheck():
 
     try:
         print("\nGesture Sensor\n")
-        discover(DATABASE)
+        discover(DATABASE, API_ENDPOINT)
         while True:
             sleep(0.05)
             SENSOR.check_gesture()

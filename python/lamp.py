@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 
-from yeelight import discover_bulbs as __discover_bulbs
-
 from db import DB, INSERT
 
 
@@ -18,10 +16,11 @@ class Lamp(object):
         return (self.id, self.ip,)
 
 
-def discover(database: DB):
+def discover(database: DB, url):
+    from yeelight import discover_bulbs
 
-    bulbs = __discover_bulbs()
-
+    bulbs = discover_bulbs(interface='wlan0')
+    
     lamps = []
     for bulb in bulbs:
         lamps.append(Lamp(bulb['capabilities']['id'], bulb['ip']))
