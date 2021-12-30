@@ -55,8 +55,6 @@ class SignUpViewController: UIViewController{
             let password = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
             let confirmPassword = confirmPasswordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
             
-            
-            
             //Create user
             createUser(username: username, email: email, password: password, confirmPassword: confirmPassword)
             
@@ -105,7 +103,7 @@ class SignUpViewController: UIViewController{
             
             URLSession.shared.dataTask(with: signUpRequest) { (data, resp, err) in
                 if err != nil {
-                    print ("Failed to create the user:", err)
+                    print ("Failed to create the user")
                     return
                 }
                 

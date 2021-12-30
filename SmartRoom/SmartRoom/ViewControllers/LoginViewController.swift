@@ -10,6 +10,10 @@ import UIKit
 
 class LoginViewController: UIViewController{
     
+    struct LoginData: Decodable{
+        let token: String
+        let token_type: String
+    }
     
     @IBOutlet weak var usernameTextField: UITextField!
     
@@ -18,10 +22,6 @@ class LoginViewController: UIViewController{
     @IBOutlet weak var loginButton: UIButton!
     
     @IBOutlet weak var errorLabel: UILabel!
-    
-    @IBAction func LoginUser(_ sender: UIButton) {
-        performSegue(withIdentifier: "TabBar", sender: loginButton)
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,9 +58,9 @@ class LoginViewController: UIViewController{
             let password = passTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
             
             //Login user
-             handleLogin(email: username, password: password)
+            handleLogin(email: username, password: password)
             
-            //Transition to home screen
+            //User success Login so -> Transition to home screen
             transitionToHome()
             
         }
@@ -81,7 +81,7 @@ class LoginViewController: UIViewController{
         
     }
 @objc fileprivate func handleLogin(email: String, password: String){
-        print("Perform login and refetch posts")
+        print("Perform login")
     
         //fire off a login request to server of localhost
         guard let url = URL(string: Constants.Api.URL + "/login" ) else {return}
@@ -97,23 +97,52 @@ class LoginViewController: UIViewController{
                 if let err = err {
                     print ("Failed to login:", err)
                     return
+                } else if
+                    let data = data,
+                    let resp = resp as? HTTPURLResponse,
+                    resp.statusCode == 201 {
+                    do {
+                        print("Logged in with success!")
+                        let loginData = try JSONDecoder().decode(LoginData.self, from: data)
+                        print(loginData.token)
+                        
+                        print(loginData.token_type)
+                        
+                        //guardar as credenciais
+                        
+                        //enviar para a lista com as lampadas, tab controller view
+
+                    } catch let parseError as NSError {
+                        print("Error")
+                        print(parseError.localizedDescription)
+                    }
+                } else {
+                    print("Not logged in")
                 }
                 
-                print("Logged in with success!")
-                //self.fetchPosts()
             }.resume() //never forget this resume
         }catch{
             print("Failed to serialise data:", error)
         }
-        
     }
     
     func transitionToHome(){
-        let lampsViewController = storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.lampsViewController) as? LampsViewController
+        let lampsViewController = storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.lampsViewController) as? UITabBarController
         
         view.window?.rootViewController = lampsViewController
-        view.window?.makeKeyAndVisible() 
+        view.window?.makeKeyAndVisible()
     }
     
+    func saveAccessToken(token: String){
+        let accessToken = token
+        let data = Data(accessToken.utf8)
+        do {
+            try KeychainInterface.save(data: data, service: "access-token", account: "laravelApi")
+        } catch {
+            print("Error saving the token on Keychain")
+        }
+    }
     
+    func savePassword(string: String){
+    }
 }

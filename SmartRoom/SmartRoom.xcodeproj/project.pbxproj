@@ -19,6 +19,7 @@
 		67C5137E2735B1E2002A5274 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67C5137D2735B1E2002A5274 /* Assets.xcassets */; };
 		67C513812735B1E2002A5274 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67C5137F2735B1E2002A5274 /* LaunchScreen.storyboard */; };
 		67CC7D9B277A832E003A563F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CC7D9A277A832E003A563F /* Constants.swift */; };
+		67CC7D9D277D1142003A563F /* KeychainInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CC7D9C277D1142003A563F /* KeychainInterface.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		67C513802735B1E2002A5274 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		67C513822735B1E2002A5274 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		67CC7D9A277A832E003A563F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		67CC7D9C277D1142003A563F /* KeychainInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainInterface.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 			children = (
 				67745557277A75FB0037080F /* Utilities.swift */,
 				67CC7D9A277A832E003A563F /* Constants.swift */,
+				67CC7D9C277D1142003A563F /* KeychainInterface.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -185,6 +188,7 @@
 				67B038672772B2B3008219D1 /* LampsViewController.swift in Sources */,
 				67C513792735B1DB002A5274 /* ViewController.swift in Sources */,
 				67C513772735B1DB002A5274 /* AppDelegate.swift in Sources */,
+				67CC7D9D277D1142003A563F /* KeychainInterface.swift in Sources */,
 				67B0386A2772B4B2008219D1 /* GesturesViewController.swift in Sources */,
 				67745558277A75FB0037080F /* Utilities.swift in Sources */,
 				67B03862277296A4008219D1 /* Lamp.swift in Sources */,

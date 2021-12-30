@@ -211,7 +211,6 @@
                                         </constraints>
                                         <state key="normal" title="Login"/>
                                         <connections>
-                                            <action selector="LoginUser:" destination="mnJ-cz-9og" eventType="touchUpInside" id="UoO-nq-0WZ"/>
                                             <action selector="loginTapped:" destination="mnJ-cz-9og" eventType="touchUpInside" id="CnN-HA-AZE"/>
                                         </connections>
                                     </button>

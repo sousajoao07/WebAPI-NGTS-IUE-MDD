@@ -12,17 +12,14 @@ struct Constants {
     
     struct Api {
         
-        static let IP = "192.168.1.9"
+        static let IP = "10.3.141.112"
         
         static let URL = "http://" + IP + ":8080/api"
-        
-        
+
     }
     
     struct Storyboard{
         
         static let lampsViewController = "HomeVC"
     }
-    
-    
 }
