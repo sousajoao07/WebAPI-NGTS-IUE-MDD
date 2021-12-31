@@ -74,14 +74,40 @@ class LampController extends Controller
         return response($lamp, 200);
     }
 
+    public function changeStateByID($id){
+
+        if($id == null || $id == ""){
+            return response(null, 400);
+        }
+        $lamp = Lamp::findOrFail($id);
+
+        if($lamp->state == true){
+            $lamp->state = false;
+        }else{
+            $lamp->state = true;
+        }
+
+        $lamp->save();
+        return response($lamp, 200);
+    }
+
     public function changeStateForAll(){
+
         $arrayLamps = LampResource::collection(Lamp::all());
-        foreach($arrayLamps as $lamp){
+        $state = null;
+
+        foreach ($arrayLamps as $lamp){
             if($lamp['state'] == true){
+                $state = true;
+            }
+        }
+        if($state == true){
+            foreach($arrayLamps as $lamp){
                 $lamp['state'] = false;
                 $lamp->save();
             }
-            elseif($lamp['state'] == false){
+        } else {
+            foreach($arrayLamps as $lamp){
                 $lamp['state'] = true;
                 $lamp->save();
             }
