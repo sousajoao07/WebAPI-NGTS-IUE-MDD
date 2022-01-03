@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class LampsLogs extends Migration
+class UpTimes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class LampsLogs extends Migration
      */
     public function up()
     {
-        Schema::create('lampsLogs', function (Blueprint $table) {
-            $table->string('id');
-            $table->boolean('state');
+        Schema::create('uptimes', function (Blueprint $table) {
+            $table->id();
+            $table->integer('lamp_id');
+            $table->string('time');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class LampsLogs extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lampsLogs');
+        Schema::dropIfExists('uptimes');
     }
 }

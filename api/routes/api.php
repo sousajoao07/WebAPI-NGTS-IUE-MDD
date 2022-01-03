@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LampController;
 use App\Http\Controllers\GestureController;
+use App\Http\Controllers\UpstateController;
+use App\Http\Controllers\UptimeController;
 use App\Http\Controllers\SyncController;
 
 /*
@@ -31,13 +33,18 @@ Route::post('/login', [AuthController::class, 'login']);
     Route::get('lamp/{id}', [LampController::class, 'getLampById']);
     Route::get('lamps' , [LampController::class, 'getLamps']);
     Route::patch('lamp/{id}/ip', [LampController::class, 'postIp']);
-    Route::patch('lamp/{id}/state/{state}', [LampController::class, 'changeState']);
+    //Route::patch('lamp/{id}/state/{state}', [LampController::class, 'changeState']);
     Route::post('lamp/{id}/toggle', [LampController::class, 'changeStateByID']);
     Route::post('lamp/toggleAll', [LampController::class, 'changeStateForAll']);
     Route::post('/gesture', [GestureController::class, 'create']);
     Route::get('/gesture/{name}', [GestureController::class, 'getActionByGestureName']);
+    Route::get('/uptimes/lastDay', [UptimeController::class, 'getKwh']);
+    Route::get('/upstate/lastState/{id}', [UpstateController::class, 'getLastUpstateOfYesterday']);
+
     Route::get('/sync/gestures', [SyncController::class, 'gestures']);
     Route::get('/sync/lamps', [SyncController::class, 'lamps']);
+    
+
 //});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

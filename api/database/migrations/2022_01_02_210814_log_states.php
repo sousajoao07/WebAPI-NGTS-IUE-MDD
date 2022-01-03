@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLampsTable extends Migration
+class LogStates extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateLampsTable extends Migration
      */
     public function up()
     {
-        Schema::create('lamps', function (Blueprint $table) {
+        Schema::create('upstates', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('mac_address');
-            $table->boolean('state');
-            $table->timestamp('last_up_state')->nullable();
+            $table->integer('lamp_id');
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ class CreateLampsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lamps');
+        Schema::dropIfExists('upstates');
     }
 }

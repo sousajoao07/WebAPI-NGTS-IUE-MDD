@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Lamp;
+use App\Models\Uptime;
+use App\Models\Upstate;
 use App\Http\Resources\LampResource;
 use Illuminate\Support\Facades\Validator;
 use Hhxsv5\SSE\SSE;
 use Hhxsv5\SSE\Event;
 use Hhxsv5\SSE\StopSSEException;
+use Carbon\Carbon;
 
 class LampController extends Controller
 {
@@ -61,18 +64,18 @@ class LampController extends Controller
         return response($lamp, 202);
     }
 
-    public function changeState($id, $state){
-        if($state=="true" || $state=="false"){
-            $lamp = Lamp::findOrFail($id);
-            $lamp->state = $state;
-            $lamp->save();
-        }
-        else{
-            return response(null, 400);
-        }
+    // public function changeState($id, $state){
+    //     if($state=="true" || $state=="false"){
+    //         $lamp = Lamp::findOrFail($id);
+    //         $lamp->state = $state;
+    //         $lamp->save();
+    //     }
+    //     else{
+    //         return response(null, 400);
+    //     }
 
-        return response($lamp, 200);
-    }
+    //     return response($lamp, 200);
+    // }
 
     public function changeStateByID($id){
 
@@ -81,10 +84,26 @@ class LampController extends Controller
         }
         $lamp = Lamp::findOrFail($id);
 
+        $lastUpState = $lamp->last_up_state;
+        $currentTime = Carbon::now();
+
         if($lamp->state == true){
             $lamp->state = false;
+            $t1 = Carbon::parse($lastUpState);
+            $t2 = Carbon::parse($currentTime);
+            $difference = $t1->diff($t2);
+
+            $diffInSeconds = $difference->s; //45
+            $diffInMinutes = $difference->i; //23
+            $diffInHours   = $difference->h; //8
+            $diffInDays    = $difference->d; //21
+        
+            $stringTime = $diffInHours . ":" . $diffInMinutes . ":" . $diffInSeconds;
+            Uptime::create(['lamp_id' =>  $id, 'time' => $stringTime]);
         }else{
             $lamp->state = true;
+            Upstate::create(['lamp_id' => $id]);
+            $lamp->last_up_state = $currentTime;
         }
 
         $lamp->save();
@@ -141,4 +160,6 @@ class LampController extends Controller
 
         return response(null, 200);
     }
+
+    
 }
