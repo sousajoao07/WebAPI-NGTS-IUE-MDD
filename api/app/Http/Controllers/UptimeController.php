@@ -7,6 +7,7 @@ use App\Models\Uptime;
 use App\Http\Resources\UptimeResource;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class UptimeController extends Controller
 { 
@@ -15,12 +16,14 @@ class UptimeController extends Controller
         $lampWatts = 9;
         $pricePerKwh = 0.14450;
 
-        $yesterday = Carbon::yesterday();
-        $uptimes = UptimeResource::collection(Uptime::all())->where('created_at', '>' , $yesterday);
+        $yesterday = date("Y-m-d", strtotime( '-1 days' ) );
+        //$uptimes = UptimeResource::collection(Uptime::all())->where('created_at', '>' , $yesterday);
+        $uptimes = DB::table('uptimes')->whereDate('created_at', $yesterday)->get();
+        
         $dateTime = Carbon::today();
 
         foreach($uptimes as $uptime){
-            $time = Carbon::parse($uptime['time'])->format('H:i:s');
+            $time = Carbon::parse($uptime->time)->format('H:i:s');
             $timePieces = explode(":", $time);
             $dateTime = $dateTime->addHours((int)$timePieces[0]);
             $dateTime = $dateTime->addMinutes((int)$timePieces[1]);
