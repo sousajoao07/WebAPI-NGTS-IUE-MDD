@@ -7,6 +7,7 @@ use App\Models\Uptime;
 use App\Http\Resources\UptimeResource;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Illuminate\Support\Facades\DB;
 
 class UptimeController extends Controller
@@ -42,6 +43,7 @@ class UptimeController extends Controller
         $kw = $lampWatts * $dblHours;
         $kwh = $kw / 1000;
         $priceInEur = $pricePerKwh * $kwh; 
+        $priceInEur = round($priceInEur, 4);
 
         $response = [
             'totalTime' => $totalTime,
@@ -62,23 +64,46 @@ class UptimeController extends Controller
         $uptimes = UptimeResource::collection(Uptime::all())->where('lamp_id', $id);
         $dateTime = Carbon::today();
 
+        $hours = 0;
+        $minutes = 0;
+        $seconds = 0;
+
         foreach($uptimes as $uptime){
             $time = Carbon::parse($uptime['time'])->format('H:i:s');
             $timePieces = explode(":", $time);
-            $dateTime = $dateTime->addHours((int)$timePieces[0]);
-            $dateTime = $dateTime->addMinutes((int)$timePieces[1]);
-            $dateTime = $dateTime->addSeconds((int)$timePieces[2]);  
-        }
-        $totalTime = $dateTime->toTimeString();
 
+            $hours = $hours + (int) $timePieces[0];
+            $minutes = $minutes + (int) $timePieces[1];
+            $seconds = $minutes + (int) $timePieces[2];
+
+            // $dateTime = $dateTime->addHours((int)$timePieces[0]);
+            // $dateTime = $dateTime->addMinutes((int)$timePieces[1]);
+            // $dateTime = $dateTime->addSeconds((int)$timePieces[2]);  
+
+        }
+        
+        // $totalTime = $dateTime->toTimeString();
         // $totalTimePieces = explode(":", $totalTime);
 
-        // $hours = (int)$totalTimePieces[0];
-        // $minutes = (int)$totalTimePieces[1];
-        // $seconds = (int)$totalTimePieces[2];
+        //Minutes to hours 
+        $minutesInHours = intdiv($minutes, 60).':'. ($minutes % 60);
+        $miutesInHoursPieces = explode(":", $minutesInHours);
+        $hoursFromMinutes = $hours + $miutesInHoursPieces[0];
+        $minutesFromMinutes = $miutesInHoursPieces[1]; 
+
+        //Seconds to minutes to hours
+        $hoursFromSeconds = floor(($seconds) / 3600);
+        $minutesFromSeconds = floor(($seconds / 60) % 60);
+        $finalSeconds = $seconds % 60;
+
+        $finalHours = $hoursFromMinutes + $hoursFromSeconds;
+        $finalMinutes = $minutesFromMinutes + $minutesFromSeconds;
+
+
+        $time = $finalHours . ":" . $finalMinutes . ":" . $finalSeconds;
 
         $response = [
-            'totalTime' => $totalTime
+            'totalTime' => $time,
         ];
 
         return response($response, 200);

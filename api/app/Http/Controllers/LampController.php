@@ -45,7 +45,7 @@ class LampController extends Controller
     public function delete(Request $request, $id){
         $lamp = Lamp::findOrFail($id);
         $lamp->delete();
-        
+
         return response(null, 204);
     }
 
@@ -60,7 +60,7 @@ class LampController extends Controller
 
         $lamp = Lamp::findOrFail($id)->fill($fields);
         $lamp->save();
-        
+
         return response($lamp, 202);
     }
 
@@ -97,7 +97,7 @@ class LampController extends Controller
             $diffInMinutes = $difference->i; //23
             $diffInHours   = $difference->h; //8
             $diffInDays    = $difference->d; //21
-        
+
             $stringTime = $diffInHours . ":" . $diffInMinutes . ":" . $diffInSeconds;
             Uptime::create(['lamp_id' =>  $id, 'time' => $stringTime]);
         }else{
@@ -115,20 +115,42 @@ class LampController extends Controller
         $arrayLamps = LampResource::collection(Lamp::all());
         $state = null;
 
+
+
         foreach ($arrayLamps as $lamp){
             if($lamp['state'] == true){
-                $state = true;
+                $state = true; // estado geral, basta uma lamp ter luz ligada
             }
         }
         if($state == true){
             foreach($arrayLamps as $lamp){
-                $lamp['state'] = false;
-                $lamp->save();
+                if($lamp['state'] == $state){ // Significa que esta luz está a fazer com que a sala esteja com o estado de luz ligada
+
+                    $currentTime = Carbon::now();
+                    $lastUpState = $lamp['last_up_state'];
+                    $lamp['state'] = false;
+                    $lamp->save();
+
+                    $t1 = Carbon::parse($lastUpState);
+                    $t2 = Carbon::parse($currentTime);
+                    $difference = $t1->diff($t2);
+
+                    $diffInSeconds = $difference->s; //45
+                    $diffInMinutes = $difference->i; //23
+                    $diffInHours   = $difference->h; //8
+                    $diffInDays    = $difference->d; //21
+
+                    $stringTime = $diffInHours . ":" . $diffInMinutes . ":" . $diffInSeconds;
+                    Uptime::create(['lamp_id' =>  $lamp['id'], 'time' => $stringTime]);
+                }
             }
         } else {
             foreach($arrayLamps as $lamp){
+                $currentTime = Carbon::now();
                 $lamp['state'] = true;
+                $lamp['last_up_state'] = $currentTime;
                 $lamp->save();
+                Upstate::create(['lamp_id' => $lamp['id']]);
             }
         }
 
@@ -146,7 +168,7 @@ class LampController extends Controller
     public function postIp(Request $request, $id)
     {
         $fields = $request->validate([
-            'ip' => 'required|string']   
+            'ip' => 'required|string']
         );
 
         $lamp = Lamp::findOrFail($id);
@@ -161,5 +183,5 @@ class LampController extends Controller
         return response(null, 200);
     }
 
-    
+
 }
