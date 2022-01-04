@@ -44,9 +44,7 @@ class UptimeController extends Controller
         $priceInEur = $pricePerKwh * $kwh; 
 
         $response = [
-            'hours' => $hours,
-            'minutes' => $minutes,
-            'seconds' => $seconds,
+            'totalTime' => $totalTime,
             'priceInEuros' => $priceInEur
         ];
 
@@ -73,16 +71,14 @@ class UptimeController extends Controller
         }
         $totalTime = $dateTime->toTimeString();
 
-        $totalTimePieces = explode(":", $totalTime);
+        // $totalTimePieces = explode(":", $totalTime);
 
-        $hours = (int)$totalTimePieces[0];
-        $minutes = (int)$totalTimePieces[1];
-        $seconds = (int)$totalTimePieces[2];
+        // $hours = (int)$totalTimePieces[0];
+        // $minutes = (int)$totalTimePieces[1];
+        // $seconds = (int)$totalTimePieces[2];
 
         $response = [
-            'hours' => $hours,
-            'minutes' => $minutes,
-            'seconds' => $seconds,
+            'totalTime' => $totalTime
         ];
 
         return response($response, 200);
