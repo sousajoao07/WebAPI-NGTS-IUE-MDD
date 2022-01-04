@@ -38,8 +38,8 @@ Route::post('/login', [AuthController::class, 'login']);
     Route::post('lamp/toggleAll', [LampController::class, 'changeStateForAll']);
     Route::post('/gesture', [GestureController::class, 'create']);
     Route::get('/gesture/{name}', [GestureController::class, 'getActionByGestureName']);
-    Route::get('/uptimes/lastDay', [UptimeController::class, 'getKwh']);
-    Route::get('/upstate/lastState/{id}', [UpstateController::class, 'getLastUpstateOfYesterday']);
+    Route::get('/uptimes/lastDay', [UptimeController::class, 'getYesterdayEnergyInfo']);
+    Route::get('/uptimes/totalUptime/{id}', [UptimeController::class, 'getTotalUptimeById']);
 
     Route::get('/sync/gestures', [SyncController::class, 'gestures']);
     Route::get('/sync/lamps', [SyncController::class, 'lamps']);
