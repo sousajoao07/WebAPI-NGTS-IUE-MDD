@@ -7,11 +7,11 @@
 //
 import UIKit
 
-struct Lamp: Equatable{
+struct Lamp: Decodable, Equatable{
     var id : Int
+    var ip : String
     var name : String
     var state : Bool
-    var ip : String
     
     static func ==(lhs: Lamp, rhs: Lamp) -> Bool{
         return lhs.id == rhs.id

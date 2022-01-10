@@ -9,13 +9,6 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?
-    ) {
-        
-        //navigationItem.title = usernameTextField.text
-    }
 
     @IBOutlet weak var loginButton: UIButton!
     
@@ -27,17 +20,32 @@ class ViewController: UIViewController {
     @IBAction func SignUp(_ sender: UIButton) {
         performSegue(withIdentifier: "RegisterPage", sender: signupButton)
     }
+
+    //override func viewDidAppear(_ animated: Bool) {
+    //    let email = readUser()
+    //    if(email == nil)
+    //    {
+    //        setUpElements()
+    //    }else{
+    //        transitionToHomeTBC()
+    //    }
+    //}
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        setUpElements()
+       super.viewDidLoad()
+      setUpElements()
     }
     
     func setUpElements(){
         Utilities.styleFilledButton(loginButton)
         Utilities.styleHollowButton(signupButton)
+    }
+    
+    func transitionToHomeTBC(){
+        let lampsViewController = self.storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.lampsViewController) as? UITabBarController
         
+        view.window?.rootViewController = lampsViewController
+        view.window?.makeKeyAndVisible()
     }
 }
 

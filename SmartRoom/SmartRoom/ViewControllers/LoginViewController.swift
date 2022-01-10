@@ -38,10 +38,7 @@ class LoginViewController: UIViewController{
         Utilities.styleTextField(usernameTextField)
         Utilities.styleTextField(passTextField)
         Utilities.styleFilledButton(loginButton)
-        
-       
     }
-    
     
     @IBAction func loginTapped(_ sender: UIButton) {
         
@@ -60,15 +57,14 @@ class LoginViewController: UIViewController{
             //Login user
             handleLogin(email: username, password: password)
             
-            //User success Login so -> Transition to home screen
-            transitionToHome()
-            
         }
     }
             
     func showError(_ message:String){
-        errorLabel.text = message
-        errorLabel.alpha = 1
+        DispatchQueue.main.async {
+            self.errorLabel.text = message
+            self.errorLabel.alpha = 1
+        }
     }
     
     func validateFields() -> String? {
@@ -78,9 +74,9 @@ class LoginViewController: UIViewController{
         }
         
         return nil
-        
     }
-@objc fileprivate func handleLogin(email: String, password: String){
+    
+    @objc fileprivate func handleLogin(email: String, password: String){
         print("Perform login")
     
         //fire off a login request to server of localhost
@@ -105,19 +101,26 @@ class LoginViewController: UIViewController{
                         print("Logged in with success!")
                         let loginData = try JSONDecoder().decode(LoginData.self, from: data)
                         print(loginData.token)
-                        
-                        print(loginData.token_type)
-                        
                         //guardar as credenciais
+                        DispatchQueue.main.async {
+                            print("Token", loginData.token)
+                            print("User", email)
+                            print("Password", password)
+                            
+                            self.saveAccessToken(token: loginData.token)
+                            self.savePassword(password: password)
+                            self.saveEmail(email: email)
                         
-                        //enviar para a lista com as lampadas, tab controller view
-
+                            //enviar para a lista com as lampadas, tab controller view
+                            self.transitionToHomeNavigationController()
+                        }
                     } catch let parseError as NSError {
                         print("Error")
                         print(parseError.localizedDescription)
                     }
                 } else {
                     print("Not logged in")
+                    self.showError("Error in Credentials")
                 }
                 
             }.resume() //never forget this resume
@@ -126,16 +129,17 @@ class LoginViewController: UIViewController{
         }
     }
     
-    func transitionToHome(){
-        let lampsViewController = storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.lampsViewController) as? UITabBarController
-        
-        view.window?.rootViewController = lampsViewController
-        view.window?.makeKeyAndVisible()
+    
+    func transitionToHomeNavigationController(){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let mainTabBarController = storyboard.instantiateViewController(withIdentifier: "MainTabBarController")
+        //self.present(mainTabBarController, animated:true, completion:nil)
+        (UIApplication.shared.delegate as? AppDelegate)?.changeRootViewController(mainTabBarController)
     }
     
     func saveAccessToken(token: String){
-        let accessToken = token
-        let data = Data(accessToken.utf8)
+        let _token = token
+        let data = Data(_token.utf8)
         do {
             try KeychainInterface.save(data: data, service: "access-token", account: "laravelApi")
         } catch {
@@ -143,6 +147,24 @@ class LoginViewController: UIViewController{
         }
     }
     
-    func savePassword(string: String){
+    func savePassword(password: String){
+        let _password = password
+        let data = Data(_password.utf8)
+        do {
+            try KeychainInterface.save(data: data, service: "password", account: "laravelApi")
+        } catch {
+            print("Error saving the password on Keychain")
+        }
     }
+    
+    func saveEmail(email: String){
+        let _email = email
+        let data = Data(_email.utf8)
+        do {
+            try KeychainInterface.save(data: data, service: "email", account: "laravelApi")
+        } catch {
+            print("Error saving the email on Keychain")
+        }
+    }
+
 }

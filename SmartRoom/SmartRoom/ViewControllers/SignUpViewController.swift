@@ -59,8 +59,7 @@ class SignUpViewController: UIViewController{
             createUser(username: username, email: email, password: password, confirmPassword: confirmPassword)
             
             //Transition to home screen
-            transitionToHome()
-            
+            transitionToHomeNavigationController()
         }
     }
     
@@ -115,10 +114,10 @@ class SignUpViewController: UIViewController{
         }
     }
     
-    func transitionToHome(){
-        let lampsViewController = storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.lampsViewController) as? UITabBarController
-        
-        view.window?.rootViewController = lampsViewController
-        view.window?.makeKeyAndVisible()
+    func transitionToHomeNavigationController(){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let lampsViewController = storyboard.instantiateViewController(withIdentifier: Constants.Storyboard.lampsViewController)
+
+        (UIApplication.shared.delegate as? AppDelegate)?.changeRootViewController(lampsViewController)
     }
 }

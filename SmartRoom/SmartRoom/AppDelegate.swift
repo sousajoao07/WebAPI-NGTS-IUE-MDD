@@ -16,6 +16,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        // add these lines
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        // if user is logged in before
+        if  readUser() != nil {
+            // instantiate the main tab bar controller and set it as root view controller
+            // using the storyboard identifier we set earlier
+            let mainTabBarController = storyboard.instantiateViewController(withIdentifier: "MainTabBarController")
+            window?.rootViewController = mainTabBarController
+        } else {
+            // if user isn't logged in
+            // instantiate the navigation controller and set it as root view controller
+            // using the storyboard identifier we set earlier
+            let loginNavController = storyboard.instantiateViewController(withIdentifier: "LoginNavigationController")
+            window?.rootViewController = loginNavController
+        }
+        
         return true
     }
 
@@ -39,6 +56,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+    func changeRootViewController(_ vc: UIViewController, animated: Bool = true) {
+        guard let window = self.window else {
+            return
+        }
+        
+        // change the root view controller to your specific view controller
+        window.rootViewController = vc
+        
+        // add animation
+        UIView.transition(with: window,
+                          duration: 0.5,
+                          options: [.transitionCrossDissolve],
+                          animations: nil,
+                          completion: nil)
+    }
+    
+    func readUser()->String?{
+        do{
+            let dataUser = try KeychainInterface.read(service: "email", account: "laravelApi")
+            let user = String(data: dataUser, encoding: .utf8)!
+            print(user)
+            return user
+        } catch {
+            print("User is null")
+            return nil
+        }
     }
 
 
