@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import LDSwiftEventSource
 
-class LampsViewController: UITableViewController{
+class LampsViewController: UITableViewController, EventHandler {
     
     struct LampData: Decodable{
         let data: [Lamp]
@@ -19,7 +20,11 @@ class LampsViewController: UITableViewController{
     override func viewDidLoad() {
         
         super.viewDidLoad()
-
+        let url = URL.init(string: Constants.Api.SYNC)!
+        let config = EventSource.Config.init(handler: self, url: url)
+        let eventSource = EventSource.init(config: config)
+        eventSource.start()
+        
         // initializing the refreshControl
         tableView.refreshControl = UIRefreshControl()
         // add target to UIRefreshControl
@@ -29,7 +34,6 @@ class LampsViewController: UITableViewController{
         getLamps()
         refreshTableView()
     }
-    
     
     @objc func refreshAfterPush(_ sender: AnyObject) {
         // Code to refresh table view
@@ -193,5 +197,25 @@ class LampsViewController: UITableViewController{
         
         changeStateById(id: stringId)
         refreshTableView()
+    }
+    
+    func onOpened() {
+        print("Opened server event")
+    }
+    
+    func onClosed() {
+        print("Opened server event")
+    }
+    
+    func onMessage(eventType: String, messageEvent: MessageEvent) {
+        print("On message server event")
+    }
+    
+    func onComment(comment: String) {
+        print("On comment server event")
+    }
+    
+    func onError(error: Error) {
+        print("On error server event")
     }
 }
