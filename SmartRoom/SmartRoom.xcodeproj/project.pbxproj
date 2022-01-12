@@ -23,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		33B89641278F63400045C625 /* swift-eventsource */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "swift-eventsource"; path = "../../swift-eventsource"; sourceTree = "<group>"; };
 		67745557277A75FB0037080F /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		67B03861277296A4008219D1 /* Lamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lamp.swift; sourceTree = "<group>"; };
 		67B038662772B2B3008219D1 /* LampsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LampsViewController.swift; sourceTree = "<group>"; };
@@ -51,6 +52,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		33B89640278F63400045C625 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				33B89641278F63400045C625 /* swift-eventsource */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 		67745556277A75BC0037080F /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -84,6 +93,7 @@
 		67C5136A2735B1DB002A5274 = {
 			isa = PBXGroup;
 			children = (
+				33B89640278F63400045C625 /* Packages */,
 				67C513752735B1DB002A5274 /* SmartRoom */,
 				67C513742735B1DB002A5274 /* Products */,
 			);
