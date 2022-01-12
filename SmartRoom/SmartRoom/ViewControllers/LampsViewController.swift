@@ -10,14 +10,6 @@ import UIKit
 
 class LampsViewController: UITableViewController{
     
-    
-    class LampCell: UITableViewCell{
-        @IBOutlet var name : UILabel?
-        @IBOutlet var state : UILabel?
-        @IBOutlet var ip : UILabel?
-        @IBOutlet var btnSwitch : UISwitch?
-    }
-    
     struct LampData: Decodable{
         let data: [Lamp]
     }
@@ -27,11 +19,33 @@ class LampsViewController: UITableViewController{
     override func viewDidLoad() {
         
         super.viewDidLoad()
+
+        // initializing the refreshControl
+        tableView.refreshControl = UIRefreshControl()
+        // add target to UIRefreshControl
+        tableView.refreshControl?.addTarget(self, action: #selector(refreshAfterPush(_:)), for: .valueChanged)
+        
         configureItems()
         getLamps()
-        
-
-        
+        refreshTableView()
+    }
+    
+    
+    @objc func refreshAfterPush(_ sender: AnyObject) {
+        // Code to refresh table view
+        getLamps()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3){
+            self.tableView.refreshControl?.endRefreshing()
+            self.tableView.reloadData()
+        }
+    }
+    
+    func refreshTableView(){
+        self.tableView.refreshControl?.beginRefreshing()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3){
+            self.tableView.refreshControl?.endRefreshing()
+            self.tableView.reloadData()
+        }
     }
     
     private func configureItems(){
@@ -48,7 +62,6 @@ class LampsViewController: UITableViewController{
         self.cleanCredentials()
         self.transitionToHomeNavigationController()
     }
-    
     
     func cleanCredentials(){
         do{
@@ -82,7 +95,7 @@ class LampsViewController: UITableViewController{
     }
     
     
-    func getLamps(){
+    @objc private func getLamps(){
         print("Perform get lamps")
         
         //fire off a login request to server of localhost
@@ -104,9 +117,7 @@ class LampsViewController: UITableViewController{
                         let response = try JSONDecoder().decode(LampData.self, from: data)
                         self.arrayLamps = response.data
                         print(self.arrayLamps.count)
-                        DispatchQueue.main.async{
-                            self.tableView.reloadData()
-                        }
+                        
                     } catch let parseError as NSError {
                         print("Error")
                         print(parseError.localizedDescription)
@@ -117,29 +128,55 @@ class LampsViewController: UITableViewController{
         }
     }
     
+    @objc fileprivate func changeStateById(id: String){
+
+        guard let url = URL(string: Constants.Api.URL + "/lamp/" + id + "/toggle" ) else {return}
+        var request = URLRequest(url:  url)
+        request.setValue("application/json", forHTTPHeaderField: "Content-type")
+        request.httpMethod = "POST"
+        do{
+            let params = ["id" : id]
+            
+            request.httpBody = try JSONSerialization.data(withJSONObject: params, options: .init())
+            
+            URLSession.shared.dataTask(with: request) { (data, resp, err) in
+                if let err = err {
+                    print ("Failed to change state:", err)
+                    return
+                } else if
+                    let resp = resp as? HTTPURLResponse,
+                    resp.statusCode == 200 {
+                        self.getLamps()
+                } else {
+                    print("The lamp state was not changed")
+                }
+                
+                }.resume() //never forget this resume
+        }catch{
+            print("Error:", error)
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrayLamps.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! LampCell
+    override func tableView(_ tableView: UITableView,
+                            cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier",
+                                                 for: indexPath) as! LampCell
+        
         let lamp = arrayLamps[indexPath.row]
+        cell.selectionStyle = .none
+        cell.labelName?.text = lamp.name
+        cell.labelIp?.text = lamp.ip
+        cell.labelState?.text = lamp.state == true ? "On" : "Off"
+        cell.button.isOn = lamp.state
+        cell.button.tag = indexPath.row
+        cell.button.tintColor = .orange
         
-        cell.name?.text = lamp.name
-        
-        //let labelName = cell.textLabel
-        //let labelIp = cell.textLabel
-        //labelName?.text = lamp.name
-        //labelName?.center = CGPoint(x: 160, y: 285)
-        //labelName?.frame = CGRect(x: 0, y: 0, width: 50, height: 21)
-        //labelName?.textAlignment = .center
-    
-        
-        //cell.imageView?.image = UIImage(named: "light")
-        
-
- 
+        cell.button.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
         
         return cell
     }
@@ -147,5 +184,14 @@ class LampsViewController: UITableViewController{
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
         return 150 //or whatever you need
+    }
+    
+    @objc func switchChanged(_ sender: UISwitch!){
+        print(sender.tag)
+        let id = arrayLamps[sender.tag].id
+        let stringId = String(id)
+        
+        changeStateById(id: stringId)
+        refreshTableView()
     }
 }

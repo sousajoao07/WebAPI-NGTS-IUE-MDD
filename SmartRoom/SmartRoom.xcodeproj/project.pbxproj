@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		67745558277A75FB0037080F /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67745557277A75FB0037080F /* Utilities.swift */; };
+		67810B55278D04B100EAB47D /* LampCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67810B54278D04B100EAB47D /* LampCell.swift */; };
 		67B03862277296A4008219D1 /* Lamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B03861277296A4008219D1 /* Lamp.swift */; };
 		67B038672772B2B3008219D1 /* LampsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B038662772B2B3008219D1 /* LampsViewController.swift */; };
 		67B0386A2772B4B2008219D1 /* GesturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B038692772B4B2008219D1 /* GesturesViewController.swift */; };
@@ -25,6 +26,7 @@
 /* Begin PBXFileReference section */
 		33B89641278F63400045C625 /* swift-eventsource */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "swift-eventsource"; path = "../../swift-eventsource"; sourceTree = "<group>"; };
 		67745557277A75FB0037080F /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		67810B54278D04B100EAB47D /* LampCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LampCell.swift; sourceTree = "<group>"; };
 		67B03861277296A4008219D1 /* Lamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lamp.swift; sourceTree = "<group>"; };
 		67B038662772B2B3008219D1 /* LampsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LampsViewController.swift; sourceTree = "<group>"; };
 		67B038692772B4B2008219D1 /* GesturesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GesturesViewController.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 				67C5137D2735B1E2002A5274 /* Assets.xcassets */,
 				67C5137F2735B1E2002A5274 /* LaunchScreen.storyboard */,
 				67C513822735B1E2002A5274 /* Info.plist */,
+				67810B54278D04B100EAB47D /* LampCell.swift */,
 			);
 			path = SmartRoom;
 			sourceTree = "<group>";
@@ -198,6 +201,7 @@
 				67B038672772B2B3008219D1 /* LampsViewController.swift in Sources */,
 				67C513792735B1DB002A5274 /* ViewController.swift in Sources */,
 				67C513772735B1DB002A5274 /* AppDelegate.swift in Sources */,
+				67810B55278D04B100EAB47D /* LampCell.swift in Sources */,
 				67CC7D9D277D1142003A563F /* KeychainInterface.swift in Sources */,
 				67B0386A2772B4B2008219D1 /* GesturesViewController.swift in Sources */,
 				67745558277A75FB0037080F /* Utilities.swift in Sources */,
@@ -282,6 +286,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -337,6 +342,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				NEW_SETTING = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
