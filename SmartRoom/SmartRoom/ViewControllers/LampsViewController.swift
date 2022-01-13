@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import LDSwiftEventSource
 
-class LampsViewController: UITableViewController{
+class LampsViewController: UITableViewController, EventHandler {
     
     struct LampData: Decodable{
         let data: [Lamp]
@@ -17,34 +18,32 @@ class LampsViewController: UITableViewController{
     var arrayLamps = [Lamp]()
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
-
+        
         // initializing the refreshControl
         tableView.refreshControl = UIRefreshControl()
         // add target to UIRefreshControl
         tableView.refreshControl?.addTarget(self, action: #selector(refreshAfterPush(_:)), for: .valueChanged)
+        self.tableView.refreshControl?.beginRefreshing()
+        
+        let url = URL.init(string: Constants.Api.SYNC)!
+        let config = EventSource.Config.init(handler: self, url: url)
+        let eventSource = EventSource.init(config: config)
+        eventSource.start()
+        
         
         configureItems()
-        getLamps()
-        refreshTableView()
     }
-    
     
     @objc func refreshAfterPush(_ sender: AnyObject) {
         // Code to refresh table view
         getLamps()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3){
-            self.tableView.refreshControl?.endRefreshing()
-            self.tableView.reloadData()
-        }
     }
     
     func refreshTableView(){
-        self.tableView.refreshControl?.beginRefreshing()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3){
-            self.tableView.refreshControl?.endRefreshing()
+        DispatchQueue.main.async {
             self.tableView.reloadData()
+            self.tableView.refreshControl?.endRefreshing()
         }
     }
     
@@ -98,33 +97,33 @@ class LampsViewController: UITableViewController{
     @objc private func getLamps(){
         print("Perform get lamps")
         
-        //fire off a login request to server of localhost
-        guard let url = URL(string: Constants.Api.URL + "/lamps" ) else {return}
-        var request = URLRequest(url:  url)
-        request.setValue("application/json", forHTTPHeaderField: "Content-type")
-        request.httpMethod = "GET"
-        do{
-            URLSession.shared.dataTask(with: request) { (data, resp, err) in
-                if let err = err {
-                    print ("Failed to get Lamps:", err)
-                    return
-                } else if
-                    let data = data,
-                    let resp = resp as? HTTPURLResponse,
-                    resp.statusCode == 200 {
-                    do {
-                        print("Get lamps with success!")
-                        let response = try JSONDecoder().decode(LampData.self, from: data)
-                        self.arrayLamps = response.data
-                        print(self.arrayLamps.count)
-                        
-                    } catch let parseError as NSError {
-                        print("Error")
-                        print(parseError.localizedDescription)
-                    }
-                }
-                
-                }.resume() //never forget this resume
+        DispatchQueue.main.async {
+            self.tableView.refreshControl?.beginRefreshing()
+            
+            //fire off a login request to server of localhost
+            guard let url = URL(string: Constants.Api.URL + "/lamps" ) else {return}
+            var request = URLRequest(url:  url)
+            request.setValue("application/json", forHTTPHeaderField: "Content-type")
+            request.httpMethod = "GET"
+            do{
+                URLSession.shared.dataTask(with: request) { (data, resp, err) in
+                    if let err = err {
+                        print ("Failed to get Lamps:", err)
+                        return
+                    } else if
+                        let data = data,
+                        let resp = resp as? HTTPURLResponse,
+                        resp.statusCode == 200 {
+                            print("Get lamps with success!")
+                            
+                            let lamps = self.parseResponseData(data: data)
+                            
+                            self.updateArrayLamps(lamps: lamps)
+                            self.refreshTableView()
+                        }
+                    
+                    }.resume() //never forget this resume
+            }
         }
     }
     
@@ -193,5 +192,65 @@ class LampsViewController: UITableViewController{
         
         changeStateById(id: stringId)
         refreshTableView()
+    }
+    
+    func onOpened() {
+        print("Opened server event")
+    }
+    
+    func onClosed() {
+        print("Opened server event")
+    }
+    
+    func onMessage(eventType: String, messageEvent: MessageEvent) {
+        print("On message server event")
+        
+        DispatchQueue.main.async {
+            self.tableView.refreshControl?.beginRefreshing()
+
+            let lamps = self.parseResponseString(string: messageEvent.data)
+            
+            self.updateArrayLamps(lamps: lamps)
+            self.refreshTableView()
+        }
+    }
+    
+    
+    func stringToData(string: String) -> Data {
+        return string.data(using: .utf8)!
+    }
+    
+    func parseResponseString(string: String) -> [Lamp] {
+        return self.parseResponseData(data: self.stringToData(string: string))
+    }
+    
+    func parseResponseData(data: Data) -> [Lamp] {
+        var lamps = [Lamp]()
+        
+        do {
+            lamps = try JSONDecoder().decode([Lamp].self, from: data)
+        } catch {
+            print("Error parsing api data to lamps array")
+        }
+        
+        return lamps
+    }
+    
+    func updateArrayLamps(lamps: [Lamp]) {
+        for lamp in lamps {
+            if let i = self.arrayLamps.firstIndex(where: { $0.id == lamp.id }) {
+                self.arrayLamps[i] = lamp
+            } else {
+                self.arrayLamps.append(lamp)
+            }
+        }
+    }
+
+    func onComment(comment: String) {
+        print("On comment server event")
+    }
+    
+    func onError(error: Error) {
+        print("On error server event")
     }
 }

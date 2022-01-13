@@ -77,8 +77,9 @@ class SyncController extends Controller
 
                 return json_encode($lamps);
             };
-            (new SSE(new Event($callback, 'lamps')))->start();
+            (new SSE(new Event($callback, 'lamps')))->start(60);
         });
+
         return $response;
     }
 }

@@ -12,9 +12,9 @@ struct Constants {
     
     struct Api {
         
-        static let IP = "192.168.1.8"
-        static let URL = "http://" + IP + ":8080/api"
-
+        static let IP = "localhost"
+        static let URL = "http://\(IP):8080/api"
+        static let SYNC = "\(URL)/sync/lamps"
     }
     
     struct Storyboard{
