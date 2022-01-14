@@ -86,6 +86,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
+    private func readToken()->String?{
+        do{
+            let dataToken = try KeychainInterface.read(service: "access-token", account: "laravelApi")
+            let token = String(data: dataToken, encoding: .utf8)!
+            print(token)
+            return token
+        } catch {
+            print("Token is null")
+            return nil
+        }
+    }
+    
 
 }
 

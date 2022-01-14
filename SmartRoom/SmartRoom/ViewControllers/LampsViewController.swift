@@ -62,7 +62,7 @@ class LampsViewController: UITableViewController, EventHandler {
         self.transitionToHomeNavigationController()
     }
     
-    func cleanCredentials(){
+    private func cleanCredentials(){
         do{
             try KeychainInterface.delete(service: "email", account: "laravelApi")
             try KeychainInterface.delete(service: "access-token", account: "laravelApi")
@@ -74,7 +74,7 @@ class LampsViewController: UITableViewController, EventHandler {
         print("User logged out")
     }
     
-    func transitionToHomeNavigationController(){
+    private func transitionToHomeNavigationController(){
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let loginNavController = storyboard.instantiateViewController(withIdentifier: "LoginNavigationController")
 
