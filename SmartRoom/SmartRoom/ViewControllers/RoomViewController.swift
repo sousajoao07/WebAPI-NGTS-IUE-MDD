@@ -11,7 +11,7 @@ import UIKit
 class RoomViewController: UIViewController{
     
     var arrayLamps = [Lamp]()
-    var roomState: Bool = false
+    var roomState: Bool? = false
     var bulbNumber: Int = 0
     
     @IBOutlet weak var switchState: UISwitch!
@@ -40,7 +40,7 @@ class RoomViewController: UIViewController{
         DispatchQueue.main.async {
             self.bulbNumberLabel.text = "Room Lamps: " + String(self.bulbNumber)
             self.stateLabel?.text = self.roomState == true ? "On" : "Off"
-            self.switchState.isOn = self.roomState
+            self.switchState.isOn = self.roomState == nil ? false : true
         }
     }
     
@@ -71,14 +71,14 @@ class RoomViewController: UIViewController{
                         let response = try JSONDecoder().decode([Lamp].self, from: data)
                         self.arrayLamps = response
                         self.bulbNumber = self.arrayLamps.count
+                        
+                        self.roomState = nil
                         for lamp in self.arrayLamps{
                             if lamp.state == true{
                                 self.roomState = true
                             }
-                            else{
-                                self.roomState = false
-                            }
                         }
+                        
                         self.updateElements()
                         
                     } catch let parseError as NSError {
