@@ -33,6 +33,9 @@ class LampsViewController: UITableViewController, EventHandler {
         
         
         configureItems()
+        tableView.refreshControl?.beginRefreshing()
+
+        refreshTableView()
     }
     
     @objc func refreshAfterPush(_ sender: AnyObject) {
@@ -90,11 +93,22 @@ class LampsViewController: UITableViewController, EventHandler {
         } catch {
             print("Token is null")
             return nil
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3){
+            self.tableView.reloadData()
+            self.tableView.refreshControl?.endRefreshing()
+        }
+    }
+    
+    func refreshTableView(){
+        getLamps()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3){
+            self.tableView.reloadData()
+            self.tableView.refreshControl?.endRefreshing()
         }
     }
     
     
-    @objc private func getLamps(){
+    private func getLamps(){
         print("Perform get lamps")
         
         DispatchQueue.main.async {
@@ -124,6 +138,33 @@ class LampsViewController: UITableViewController, EventHandler {
                     
                     }.resume() //never forget this resume
             }
+        //fire off a login request to server of localhost
+        guard let url = URL(string: Constants.Api.URL + "/lamps" ) else {return}
+        var request = URLRequest(url:  url)
+        request.setValue("application/json", forHTTPHeaderField: "Content-type")
+        request.httpMethod = "GET"
+        do{
+            URLSession.shared.dataTask(with: request) { (data, resp, err) in
+                if let err = err {
+                    print ("Failed to get Lamps:", err)
+                    return
+                } else if
+                    let data = data,
+                    let resp = resp as? HTTPURLResponse,
+                    resp.statusCode == 200 {
+                    do {
+                        print("Get lamps with success!")
+                        let response = try JSONDecoder().decode([Lamp].self, from: data)
+                        self.arrayLamps = response
+                        print(self.arrayLamps.count)
+                        
+                    } catch let parseError as NSError {
+                        print("Error")
+                        print(parseError.localizedDescription)
+                    }
+                }
+                
+                }.resume() //never forget this resume
         }
     }
     
@@ -173,7 +214,7 @@ class LampsViewController: UITableViewController, EventHandler {
         cell.labelState?.text = lamp.state == true ? "On" : "Off"
         cell.button.isOn = lamp.state
         cell.button.tag = indexPath.row
-        cell.button.tintColor = .orange
+        cell.button.onTintColor = UIColor.init(red: 0/255, green: 122/255, blue: 255/255, alpha: 1)
         
         cell.button.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
         
@@ -252,5 +293,9 @@ class LampsViewController: UITableViewController, EventHandler {
     
     func onError(error: Error) {
         print("###### " + error.localizedDescription)
+    }
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
 }

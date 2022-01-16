@@ -31,11 +31,20 @@ class Utilities {
     static func styleFilledButton(_ button:UIButton) {
         
         // Filled rounded corner style
-        button.backgroundColor = UIColor.init(red: 0/255, green: 110/255, blue: 230/255, alpha: 1)
+        button.backgroundColor = UIColor.init(red: 0/255, green: 122/255, blue: 255/255, alpha: 1)
         button.layer.cornerRadius = 25.0
         button.tintColor = UIColor.white
     }
     
+    
+    static func styleCircleButton(_ button:UIButton) {
+        
+        // Filled rounded corner style
+        button.backgroundColor = UIColor.init(red: 0/255, green: 122/255, blue: 255/255, alpha: 1)
+        button.layer.cornerRadius = button.frame.width/2
+        button.tintColor = UIColor.white
+        button.layer.masksToBounds = true
+    }
     static func styleHollowButton(_ button:UIButton) {
         
         // Hollow rounded corner style

@@ -1,4 +1,3 @@
-//
 //  Constants.swift
 //  SmartRoom
 //
@@ -22,4 +21,7 @@ struct Constants {
         static let lampsViewController = "MainTabBarController"
         static let loginNavigationController = "LoginNavigationController"
     }
+    
 }
+    
+    
