@@ -10,16 +10,16 @@ import UIKit
 import LDSwiftEventSource
 
 class LampsViewController: UITableViewController, EventHandler {
-    
+
     struct LampData: Decodable{
         let data: [Lamp]
     }
-    
+
     var arrayLamps = [Lamp]()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         // initializing the refreshControl
         tableView.refreshControl = UIRefreshControl()
         // add target to UIRefreshControl
@@ -93,20 +93,8 @@ class LampsViewController: UITableViewController, EventHandler {
         } catch {
             print("Token is null")
             return nil
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3){
-            self.tableView.reloadData()
-            self.tableView.refreshControl?.endRefreshing()
         }
     }
-    
-    func refreshTableView(){
-        getLamps()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3){
-            self.tableView.reloadData()
-            self.tableView.refreshControl?.endRefreshing()
-        }
-    }
-    
     
     private func getLamps(){
         print("Perform get lamps")
@@ -138,33 +126,6 @@ class LampsViewController: UITableViewController, EventHandler {
                     
                     }.resume() //never forget this resume
             }
-        //fire off a login request to server of localhost
-        guard let url = URL(string: Constants.Api.URL + "/lamps" ) else {return}
-        var request = URLRequest(url:  url)
-        request.setValue("application/json", forHTTPHeaderField: "Content-type")
-        request.httpMethod = "GET"
-        do{
-            URLSession.shared.dataTask(with: request) { (data, resp, err) in
-                if let err = err {
-                    print ("Failed to get Lamps:", err)
-                    return
-                } else if
-                    let data = data,
-                    let resp = resp as? HTTPURLResponse,
-                    resp.statusCode == 200 {
-                    do {
-                        print("Get lamps with success!")
-                        let response = try JSONDecoder().decode([Lamp].self, from: data)
-                        self.arrayLamps = response
-                        print(self.arrayLamps.count)
-                        
-                    } catch let parseError as NSError {
-                        print("Error")
-                        print(parseError.localizedDescription)
-                    }
-                }
-                
-                }.resume() //never forget this resume
         }
     }
     
@@ -294,6 +255,7 @@ class LampsViewController: UITableViewController, EventHandler {
     func onError(error: Error) {
         print("###### " + error.localizedDescription)
     }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
