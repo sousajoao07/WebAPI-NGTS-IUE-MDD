@@ -63,7 +63,7 @@ class ActionsViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
                 } else if
                     let resp = resp as? HTTPURLResponse,
                     resp.statusCode == 200 {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    DispatchQueue.main.async() {
                         self.navigationController?.popViewController(animated: true)
                     }
                     
