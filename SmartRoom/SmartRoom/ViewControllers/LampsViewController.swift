@@ -251,6 +251,6 @@ class LampsViewController: UITableViewController, EventHandler {
     }
     
     func onError(error: Error) {
-        print("On error server event")
+        print("###### " + error.localizedDescription)
     }
 }

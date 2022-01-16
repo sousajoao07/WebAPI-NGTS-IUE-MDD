@@ -23,7 +23,7 @@ class SyncController extends Controller
             $lastUpdate = null;
 
             $callback = function () use (&$lastUpdate) {
-                $gestures = DB::table('gestures')->when(isset($lastUpdate), function ($query, $lastUpdate) {
+                $gestures = DB::table('gestures')->when(isset($lastUpdate), function ($query) {
                     return $query->whereDate('updated_at', '>=', $lastUpdate->toDateString())
                         ->whereTime('updated_at', '>', $lastUpdate->toTimeString());
                 })->get();
@@ -59,13 +59,13 @@ class SyncController extends Controller
             $lastUpdate = null;
 
             $callback = function () use (&$lastUpdate) {
-                $lamps = DB::table('lamps')->when(isset($lastUpdate), function ($query, $lastUpdate) {
+                $lamps = DB::table('lamps')->when(isset($lastUpdate), function ($query) use ($lastUpdate){
                     return $query->whereDate('updated_at', '>=', $lastUpdate->toDateString())
                         ->whereTime('updated_at', '>', $lastUpdate->toTimeString());
                 })->get();
 
                 if (empty($lamps)) {
-                    return false;
+                    return json_encode([]);
                 }
 
                 $shouldStop = false;
@@ -77,7 +77,7 @@ class SyncController extends Controller
 
                 return json_encode($lamps);
             };
-            (new SSE(new Event($callback, 'lamps')))->start(60);
+            (new SSE(new Event($callback)))->start();
         });
 
         return $response;
