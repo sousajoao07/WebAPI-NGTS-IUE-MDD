@@ -239,6 +239,12 @@ class PAJ7620U2(object):
             self.__light = 100
         bulb.set_brightness(self.__light)
 
+    def change_state(self, bulb, value):
+        if value:
+            bulb.turn_on()
+        else:
+            bulb.turn_off()
+
     def do_action(self, name):
         from yeelight import Bulb
         from lamp import all as allLamps
@@ -256,10 +262,10 @@ class PAJ7620U2(object):
 
                         if action == 'turn_on':
                             print(name + "\t->\tTurn On\r\n")
-                            bulb.turn_on()
+                            self.change_state(bulb, True)
                         elif action == 'turn_off':
                             print(name + "\t->\tTurn Off\r\n")
-                            bulb.turn_off()
+                            self.change_state(bulb, False)
                         elif action == 'increase_light':
                             print(name + "\t->\tIncrease Light\r\n")
                             self.change_light(bulb, 25)
@@ -278,7 +284,8 @@ class PAJ7620U2(object):
 
                             print(name + "\t->\tDisco Flow\r\n")
                             if self.__color == False:
-                                bulb.start_flow(Flow(count=0, transitions=disco()))
+                                bulb.start_flow(
+                                    Flow(count=0, transitions=disco()))
                             else:
                                 bulb.stop_flow()
                             self.__color = not self.__color

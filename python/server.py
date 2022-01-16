@@ -8,9 +8,10 @@ from sensor import PAJ7620U2
 from api import sync
 from db import DB
 
-API_ENDPOINT = "http://10.3.141.112:8080/api"
+API_ENDPOINT = "http://10.3.141.114:8080/api"
 DATABASE = None
 SENSOR = None
+
 
 def sensorCheck():
     from time import sleep
@@ -29,6 +30,8 @@ def sensorCheck():
 def SSEClient(table, bulkInsert):
     from sseclient import SSEClient
     from json import loads
+    from yeelight import Bulb
+    from lamp import all as allLamps
 
     try:
         print("\nSync Table: " + table + "\n")
@@ -39,6 +42,18 @@ def SSEClient(table, bulkInsert):
             data = loads(event.data)
             if data:
                 bulkInsert(DATABASE, data)
+                print(event)
+                if table == 'lamps':
+                    from time import sleep
+                    for lamp in allLamps(DATABASE):
+                        try:
+                            bulb = Bulb(lamp.ip)
+                            if lamp.state:
+                                bulb.turn_on()
+                            else:
+                                bulb.turn_off()
+                        except:
+                            pass
     except KeyboardInterrupt:
         pass
 
