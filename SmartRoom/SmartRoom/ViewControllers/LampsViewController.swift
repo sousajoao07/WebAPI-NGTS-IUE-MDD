@@ -25,8 +25,8 @@ class LampsViewController: UITableViewController{
         // add target to UIRefreshControl
         tableView.refreshControl?.addTarget(self, action: #selector(refreshAfterPush(_:)), for: .valueChanged)
         
-        configureItems()
-        getLamps()
+        tableView.refreshControl?.beginRefreshing()
+
         refreshTableView()
     }
     
@@ -35,67 +35,21 @@ class LampsViewController: UITableViewController{
         // Code to refresh table view
         getLamps()
         DispatchQueue.main.asyncAfter(deadline: .now() + 3){
-            self.tableView.refreshControl?.endRefreshing()
             self.tableView.reloadData()
+            self.tableView.refreshControl?.endRefreshing()
         }
     }
     
     func refreshTableView(){
-        self.tableView.refreshControl?.beginRefreshing()
+        getLamps()
         DispatchQueue.main.asyncAfter(deadline: .now() + 3){
-            self.tableView.refreshControl?.endRefreshing()
             self.tableView.reloadData()
-        }
-    }
-    
-    private func configureItems(){
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "Logout",
-            style: .done,
-            target: self,
-            action: #selector(didTapButton(sender:))
-        )
-    }
-    
-    @objc func didTapButton(sender: UIBarButtonItem){
-        print("Logout tapped")
-        self.cleanCredentials()
-        self.transitionToHomeNavigationController()
-    }
-    
-    private func cleanCredentials(){
-        do{
-            try KeychainInterface.delete(service: "email", account: "laravelApi")
-            try KeychainInterface.delete(service: "access-token", account: "laravelApi")
-            try KeychainInterface.delete(service: "password", account: "laravelApi")
-            
-        } catch {
-            print("Error delete the data on Keychain")
-        }
-        print("User logged out")
-    }
-    
-    private func transitionToHomeNavigationController(){
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let loginNavController = storyboard.instantiateViewController(withIdentifier: "LoginNavigationController")
-
-        (UIApplication.shared.delegate as? AppDelegate)?.changeRootViewController(loginNavController)
-    }
-    
-    func readToken()->String?{
-        do{
-            let dataToken = try KeychainInterface.read(service: "access-token", account: "laravelApi")
-            let token = String(data: dataToken, encoding: .utf8)!
-            print(token)
-            return token
-        } catch {
-            print("Token is null")
-            return nil
+            self.tableView.refreshControl?.endRefreshing()
         }
     }
     
     
-    @objc private func getLamps(){
+    private func getLamps(){
         print("Perform get lamps")
         
         //fire off a login request to server of localhost
@@ -114,8 +68,8 @@ class LampsViewController: UITableViewController{
                     resp.statusCode == 200 {
                     do {
                         print("Get lamps with success!")
-                        let response = try JSONDecoder().decode(LampData.self, from: data)
-                        self.arrayLamps = response.data
+                        let response = try JSONDecoder().decode([Lamp].self, from: data)
+                        self.arrayLamps = response
                         print(self.arrayLamps.count)
                         
                     } catch let parseError as NSError {
@@ -174,7 +128,7 @@ class LampsViewController: UITableViewController{
         cell.labelState?.text = lamp.state == true ? "On" : "Off"
         cell.button.isOn = lamp.state
         cell.button.tag = indexPath.row
-        cell.button.tintColor = .orange
+        cell.button.onTintColor = UIColor.init(red: 0/255, green: 122/255, blue: 255/255, alpha: 1)
         
         cell.button.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
         
@@ -194,4 +148,13 @@ class LampsViewController: UITableViewController{
         changeStateById(id: stringId)
         refreshTableView()
     }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    
+    
+        
 }

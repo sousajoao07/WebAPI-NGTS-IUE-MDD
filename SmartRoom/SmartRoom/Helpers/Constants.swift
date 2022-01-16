@@ -12,7 +12,7 @@ struct Constants {
     
     struct Api {
         
-        static let IP = "192.168.1.8"
+        static let IP = "192.168.1.12"
         static let URL = "http://" + IP + ":8080/api"
 
     }
@@ -22,4 +22,7 @@ struct Constants {
         static let lampsViewController = "MainTabBarController"
         static let loginNavigationController = "LoginNavigationController"
     }
+    
 }
+    
+    

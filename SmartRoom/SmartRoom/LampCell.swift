@@ -8,9 +8,7 @@
 
 import UIKit
 
-class LampCell:
-
-UITableViewCell{
+class LampCell: UITableViewCell{
     
     @IBOutlet weak var button: UISwitch!
     

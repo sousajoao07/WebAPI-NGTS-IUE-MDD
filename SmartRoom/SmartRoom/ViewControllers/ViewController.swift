@@ -20,16 +20,6 @@ class ViewController: UIViewController {
     @IBAction func SignUp(_ sender: UIButton) {
         performSegue(withIdentifier: "RegisterPage", sender: signupButton)
     }
-
-    //override func viewDidAppear(_ animated: Bool) {
-    //    let email = readUser()
-    //    if(email == nil)
-    //    {
-    //        setUpElements()
-    //    }else{
-    //        transitionToHomeTBC()
-    //    }
-    //}
     
     override func viewDidLoad() {
        super.viewDidLoad()
