@@ -13,17 +13,13 @@ class SyncController extends Controller
 {
     public function gestures()
     {
-        $response = new \Symfony\Component\HttpFoundation\StreamedResponse();
-        $response->headers->set('Content-Type', 'text/event-stream');
-        $response->headers->set('Cache-Control', 'no-cache');
-        $response->headers->set('Connection', 'keep-alive');
-        $response->headers->set('X-Accel-Buffering', 'no');
+        $response = $this->newStreamedResponse();
 
         $response->setCallback(function () {
             $lastUpdate = null;
 
             $callback = function () use (&$lastUpdate) {
-                $gestures = DB::table('gestures')->when(isset($lastUpdate), function ($query) {
+                $gestures = DB::table('gestures')->when($lastUpdate, function ($query, $lastUpdate) {
                     return $query->whereDate('updated_at', '>=', $lastUpdate->toDateString())
                         ->whereTime('updated_at', '>', $lastUpdate->toTimeString());
                 })->get();
@@ -41,25 +37,21 @@ class SyncController extends Controller
 
                 return json_encode($gestures);
             };
-            (new SSE(new Event($callback, 'gestures')))->start();
+            (new SSE(new Event($callback)))->start();
         });
+    
         return $response;
     }
 
     public function lamps()
     {
-        $response = new \Symfony\Component\HttpFoundation\StreamedResponse();
-        $response->headers->set('Content-Type', 'text/event-stream');
-        $response->headers->set('Cache-Control', 'no-cache');
-        $response->headers->set('Connection', 'keep-alive');
-        $response->headers->set('X-Accel-Buffering', 'no');
-
+        $response = $this->newStreamedResponse();
 
         $response->setCallback(function () {
             $lastUpdate = null;
 
             $callback = function () use (&$lastUpdate) {
-                $lamps = DB::table('lamps')->when(isset($lastUpdate), function ($query) use ($lastUpdate){
+                $lamps = DB::table('lamps')->when($lastUpdate, function ($query, $lastUpdate){
                     return $query->whereDate('updated_at', '>=', $lastUpdate->toDateString())
                         ->whereTime('updated_at', '>', $lastUpdate->toTimeString());
                 })->get();
@@ -79,6 +71,17 @@ class SyncController extends Controller
             };
             (new SSE(new Event($callback)))->start();
         });
+
+        return $response;
+    }
+
+    private function newStreamedResponse()
+    {
+        $response = new \Symfony\Component\HttpFoundation\StreamedResponse();
+        $response->headers->set('Content-Type', 'text/event-stream');
+        $response->headers->set('Cache-Control', 'no-cache');
+        $response->headers->set('Connection', 'keep-alive');
+        $response->headers->set('X-Accel-Buffering', 'no');
 
         return $response;
     }
