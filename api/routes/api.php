@@ -37,10 +37,12 @@ Route::post('/login', [AuthController::class, 'login']);
     Route::post('lamp/{id}/toggle', [LampController::class, 'changeStateByID']);
     Route::post('lamp/toggleAll', [LampController::class, 'changeStateForAll']);
     Route::post('/gesture', [GestureController::class, 'create']);
-    Route::get('/gesture/{name}', [GestureController::class, 'getActionByGestureName']);
-    Route::get('/uptimes/lastDay', [UptimeController::class, 'getYesterdayEnergyInfo']);
-    Route::get('/uptimes/totalUptime/{id}', [UptimeController::class, 'getTotalUptimeById']);
-
+    Route::get('/gesture/{name}', [GestureController::class, 'getActionByGestureName']); 
+    Route::get('/gestures', [GestureController::class, 'getGestures']);
+    Route::patch('/gesture/{id}/action', [GestureController::class, 'updateGestureActionById']);
+    Route::get('/uptimes/lastDay', [UptimeController::class, 'getYesterdayEnergyInfo']); //DigitalTwin
+    Route::get('/uptimes/totalUptime/{id}', [UptimeController::class, 'getTotalUptimeById']); //DigitalTwin
+    
     Route::get('/sync/gestures', [SyncController::class, 'gestures']);
     Route::get('/sync/lamps', [SyncController::class, 'lamps']);
     
