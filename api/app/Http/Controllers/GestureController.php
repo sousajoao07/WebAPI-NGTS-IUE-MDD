@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Gesture;
+use App\Http\Resources\GestureResource;
 use Illuminate\Support\Facades\Validator;
 
 class GestureController extends Controller
@@ -47,5 +48,26 @@ class GestureController extends Controller
         return response($response, 200);
     }
 
+    public function getGestures(){
+        $gestures = Gesture::orderBy('id', 'ASC')->get();
+        return json_encode(GestureResource::collection($gestures));
+    }
+
+    public function updateGestureActionById(Request $request, $id){
+        $fields = $request->validate([
+            'action' => 'required|string']
+        );
+
+        $gesture = Gesture::findOrFail($id);
+        if($gesture) {
+            $gesture->action = $fields['action'];
+            $gesture->save();
+        }
+        else{
+            response(null, 400);
+        }
+
+        return response(null, 200);
+    }
     
 }

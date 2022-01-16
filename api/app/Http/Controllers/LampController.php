@@ -162,7 +162,7 @@ class LampController extends Controller
     }
 
     public function getLamps(){
-        return response(LampResource::collection(Lamp::all()));
+        return response(LampResource::collection(Lamp::orderBy('id', 'ASC')->get()));
     }
 
     public function postIp(Request $request, $id)
