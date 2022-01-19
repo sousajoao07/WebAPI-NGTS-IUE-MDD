@@ -20,7 +20,7 @@ class GesturesViewController: UITableViewController{
         // add target to UIRefreshControl
         tableView.refreshControl?.addTarget(self, action: #selector(refreshAfterPush(_:)), for: .valueChanged)
         
-        self.getGestures()
+        getGestures()
     }
     
     override func viewWillAppear(_ animated: Bool) {

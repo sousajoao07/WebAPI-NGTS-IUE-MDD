@@ -8,40 +8,33 @@
 
 import UIKit
 
-class RoomViewController: UIViewController{
+class RoomViewController: UITableViewController{
     
     var arrayLamps = [Lamp]()
+    var arrayRooms = [Room]()
     var roomState: Bool? = false
     var bulbNumber: Int = 0
     
-    @IBOutlet weak var switchState: UISwitch!
-    
-    @IBOutlet weak var stateLabel: UILabel!
-    
-    @IBOutlet weak var bulbNumberLabel: UILabel!
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        getLamps()
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupElements()
-    }
-    
-    private func setupElements(){
         
-        switchState.onTintColor = UIColor.init(red: 0/255, green: 122/255, blue: 255/255, alpha: 1)
-
+        // initializing the refreshControl
+        tableView.refreshControl = UIRefreshControl()
+        // add target to UIRefreshControl
+        tableView.refreshControl?.addTarget(self, action: #selector(refreshAfterPush(_:)), for: .valueChanged)
+        
+        getRooms()
     }
     
-    func updateElements(){
-        DispatchQueue.main.async {
-            self.bulbNumberLabel.text = "Room Lamps: " + String(self.bulbNumber)
-            self.stateLabel?.text = self.roomState == true ? "On" : "Off"
-            self.switchState.isOn = self.roomState == nil ? false : true
-        }
+    @objc func refreshAfterPush(_ sender: AnyObject) {
+        self.getRooms()
+    }
+
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getRooms()
     }
     
     
@@ -49,37 +42,32 @@ class RoomViewController: UIViewController{
         self.changeRoomState()
     }
     
-    private func getLamps(){
-        print("Perform get lamps")
+   
+    private func getRooms(){
+        print("Perform get rooms")
         
         //fire off a login request to server of localhost
-        guard let url = URL(string: Constants.Api.URL + "/lamps" ) else {return}
+        guard let url = URL(string: Constants.Api.URL + "/rooms" ) else {return}
         var request = URLRequest(url:  url)
         request.setValue("application/json", forHTTPHeaderField: "Content-type")
         request.httpMethod = "GET"
         do{
             URLSession.shared.dataTask(with: request) { (data, resp, err) in
                 if let err = err {
-                    print ("Failed to get Lamps:", err)
+                    print ("Failed to get rooms:", err)
                     return
                 } else if
                     let data = data,
                     let resp = resp as? HTTPURLResponse,
                     resp.statusCode == 200 {
                     do {
-                        print("Get lamps with success!")
-                        let response = try JSONDecoder().decode([Lamp].self, from: data)
-                        self.arrayLamps = response
-                        self.bulbNumber = self.arrayLamps.count
-                        
-                        self.roomState = nil
-                        for lamp in self.arrayLamps{
-                            if lamp.state == true{
-                                self.roomState = true
-                            }
+                        print("Get rooms with success!")
+                        let response = try JSONDecoder().decode([Room].self, from: data)
+                        self.arrayRooms = response
+
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
                         }
-                        
-                        self.updateElements()
                         
                     } catch let parseError as NSError {
                         print("Error")
@@ -95,7 +83,7 @@ class RoomViewController: UIViewController{
         print("Perform Change Room State")
         
         //fire off a login request to server of localhost
-        guard let url = URL(string: Constants.Api.URL + "/lamp/toggleAll") else {return}
+        guard let url = URL(string: Constants.Api.URL + "/lamp/toggleRoom") else {return}
         var request = URLRequest(url:  url)
         request.setValue("application/json", forHTTPHeaderField: "Content-type")
         request.httpMethod = "POST"
@@ -109,7 +97,7 @@ class RoomViewController: UIViewController{
                 resp.statusCode == 200 {
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    self.getLamps()
+                    //self.getLamps()
                 }
                 
                 
@@ -119,6 +107,49 @@ class RoomViewController: UIViewController{
             
             }.resume() //never forget this resume
        
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return arrayRooms.count
+    }
+    
+    override func tableView(_ tableView: UITableView,
+                            cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "RoomCell",
+                                                 for: indexPath) as! RoomCell
+        
+        let room = arrayRooms[indexPath.row]
+        cell.selectionStyle = .none
+        //cell.labelState?.text = lamp.state == true ? "On" : "Off"
+        cell.labelState.text = room.state == true ? "On" : "Off"
+        cell.button.isOn = room.state
+        cell.button.tag = indexPath.row
+        cell.button.onTintColor = UIColor.init(red: 0/255, green: 122/255, blue: 255/255, alpha: 1)
+        
+        cell.button.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
+        
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+    {
+        return 150 //or whatever you need
+    }
+    
+    @objc func switchChanged(_ sender: UISwitch!){
+        /*print(sender.tag)
+        let id = arrayLamps[sender.tag].id
+        let stringId = String(id)
+        
+        changeStateById(id: stringId)
+        refreshTableView()*/
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
    
 }

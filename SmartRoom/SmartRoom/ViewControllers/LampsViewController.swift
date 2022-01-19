@@ -69,6 +69,7 @@ class LampsViewController: UITableViewController{
                     do {
                         print("Get lamps with success!")
                         let response = try JSONDecoder().decode([Lamp].self, from: data)
+                        print(response)
                         self.arrayLamps = response
                         print(self.arrayLamps.count)
                         
