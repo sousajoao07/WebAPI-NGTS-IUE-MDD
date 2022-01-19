@@ -20,7 +20,7 @@ class GesturesViewController: UITableViewController{
         // add target to UIRefreshControl
         tableView.refreshControl?.addTarget(self, action: #selector(refreshAfterPush(_:)), for: .valueChanged)
         
-        self.getGestures()
+        getGestures()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,7 +63,7 @@ class GesturesViewController: UITableViewController{
                     }
                 }
                 else{
-                    print("Erro making request")
+                    print("Error making request")
                 }
                 
                 }.resume() //never forget this resume

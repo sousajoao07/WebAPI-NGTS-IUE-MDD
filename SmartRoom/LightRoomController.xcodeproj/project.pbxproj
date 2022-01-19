@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		33B8964C278F786F0045C625 /* LDSwiftEventSource in Frameworks */ = {isa = PBXBuildFile; productRef = 33B8964B278F786F0045C625 /* LDSwiftEventSource */; };
+		6733130127979F6700BB4610 /* LDSwiftEventSource in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 33B8964B278F786F0045C625 /* LDSwiftEventSource */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		67745558277A75FB0037080F /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67745557277A75FB0037080F /* Utilities.swift */; };
 		67810B55278D04B100EAB47D /* LampCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67810B54278D04B100EAB47D /* LampCell.swift */; };
 		67810B57278F81F700EAB47D /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67810B56278F81F700EAB47D /* ProfileViewController.swift */; };
@@ -27,9 +28,21 @@
 		67C513812735B1E2002A5274 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67C5137F2735B1E2002A5274 /* LaunchScreen.storyboard */; };
 		67CC7D9B277A832E003A563F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CC7D9A277A832E003A563F /* Constants.swift */; };
 		67CC7D9D277D1142003A563F /* KeychainInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CC7D9C277D1142003A563F /* KeychainInterface.swift */; };
-		67E5134227974F9A00AA7C62 /* Room.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E5134127974F9A00AA7C62 /* Room.swift */; };
-		67E5134427974FA900AA7C62 /* RoomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E5134327974FA900AA7C62 /* RoomCell.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6733130227979F6700BB4610 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6733130127979F6700BB4610 /* LDSwiftEventSource in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		33B89641278F63400045C625 /* swift-eventsource */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "swift-eventsource"; path = "../../swift-eventsource"; sourceTree = "<group>"; };
@@ -45,7 +58,7 @@
 		67B8A5CF2790F6E400C1ADE3 /* ActionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsViewController.swift; sourceTree = "<group>"; };
 		67B8A5D12791001F00C1ADE3 /* Gestures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gestures.swift; sourceTree = "<group>"; };
 		67B8A5D3279105A500C1ADE3 /* GestureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureCell.swift; sourceTree = "<group>"; };
-		67C513732735B1DB002A5274 /* SmartRoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartRoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		67C513732735B1DB002A5274 /* LightRoomController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LightRoomController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		67C513762735B1DB002A5274 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		67C513782735B1DB002A5274 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		67C5137B2735B1DB002A5274 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -54,8 +67,6 @@
 		67C513822735B1E2002A5274 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		67CC7D9A277A832E003A563F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		67CC7D9C277D1142003A563F /* KeychainInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainInterface.swift; sourceTree = "<group>"; };
-		67E5134127974F9A00AA7C62 /* Room.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Room.swift; sourceTree = "<group>"; };
-		67E5134327974FA900AA7C62 /* RoomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,8 +106,6 @@
 				67810B54278D04B100EAB47D /* LampCell.swift */,
 				67B8A5D12791001F00C1ADE3 /* Gestures.swift */,
 				67B8A5D3279105A500C1ADE3 /* GestureCell.swift */,
-				67E5134127974F9A00AA7C62 /* Room.swift */,
-				67E5134327974FA900AA7C62 /* RoomCell.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -129,7 +138,7 @@
 		67C513742735B1DB002A5274 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				67C513732735B1DB002A5274 /* SmartRoom.app */,
+				67C513732735B1DB002A5274 /* LightRoomController.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -152,24 +161,25 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		67C513722735B1DB002A5274 /* SmartRoom */ = {
+		67C513722735B1DB002A5274 /* LightRoomController */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 67C513852735B1E2002A5274 /* Build configuration list for PBXNativeTarget "SmartRoom" */;
+			buildConfigurationList = 67C513852735B1E2002A5274 /* Build configuration list for PBXNativeTarget "LightRoomController" */;
 			buildPhases = (
 				67C5136F2735B1DB002A5274 /* Sources */,
 				67C513702735B1DB002A5274 /* Frameworks */,
 				67C513712735B1DB002A5274 /* Resources */,
+				6733130227979F6700BB4610 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = SmartRoom;
+			name = LightRoomController;
 			packageProductDependencies = (
 				33B8964B278F786F0045C625 /* LDSwiftEventSource */,
 			);
 			productName = Login;
-			productReference = 67C513732735B1DB002A5274 /* SmartRoom.app */;
+			productReference = 67C513732735B1DB002A5274 /* LightRoomController.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -188,7 +198,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 67C5136E2735B1DB002A5274 /* Build configuration list for PBXProject "SmartRoom" */;
+			buildConfigurationList = 67C5136E2735B1DB002A5274 /* Build configuration list for PBXProject "LightRoomController" */;
 			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -204,7 +214,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				67C513722735B1DB002A5274 /* SmartRoom */,
+				67C513722735B1DB002A5274 /* LightRoomController */,
 			);
 		};
 /* End PBXProject section */
@@ -230,7 +240,6 @@
 				67B8A5D4279105A500C1ADE3 /* GestureCell.swift in Sources */,
 				67B038902775FACD008219D1 /* LoginViewController.swift in Sources */,
 				67B03894277915FF008219D1 /* SignUpViewController.swift in Sources */,
-				67E5134227974F9A00AA7C62 /* Room.swift in Sources */,
 				67B038672772B2B3008219D1 /* LampsViewController.swift in Sources */,
 				67C513792735B1DB002A5274 /* ViewController.swift in Sources */,
 				67C513772735B1DB002A5274 /* AppDelegate.swift in Sources */,
@@ -243,7 +252,6 @@
 				6798D9B627941463007F1D35 /* RoomViewController.swift in Sources */,
 				67745558277A75FB0037080F /* Utilities.swift in Sources */,
 				67B03862277296A4008219D1 /* Lamp.swift in Sources */,
-				67E5134427974FA900AA7C62 /* RoomCell.swift in Sources */,
 				67CC7D9B277A832E003A563F /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -402,7 +410,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ipl.SmarRoom;
+				PRODUCT_BUNDLE_IDENTIFIER = ipl.LightRoomController;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -421,7 +429,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ipl.SmarRoom;
+				PRODUCT_BUNDLE_IDENTIFIER = ipl.LightRoomController;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -431,7 +439,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		67C5136E2735B1DB002A5274 /* Build configuration list for PBXProject "SmartRoom" */ = {
+		67C5136E2735B1DB002A5274 /* Build configuration list for PBXProject "LightRoomController" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				67C513832735B1E2002A5274 /* Debug */,
@@ -440,7 +448,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		67C513852735B1E2002A5274 /* Build configuration list for PBXNativeTarget "SmartRoom" */ = {
+		67C513852735B1E2002A5274 /* Build configuration list for PBXNativeTarget "LightRoomController" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				67C513862735B1E2002A5274 /* Debug */,
