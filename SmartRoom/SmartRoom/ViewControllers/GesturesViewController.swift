@@ -63,7 +63,7 @@ class GesturesViewController: UITableViewController{
                     }
                 }
                 else{
-                    print("Erro making request")
+                    print("Error making request")
                 }
                 
                 }.resume() //never forget this resume

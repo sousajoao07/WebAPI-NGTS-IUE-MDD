@@ -12,7 +12,7 @@ struct Constants {
     
     struct Api {
         
-        static let IP = "192.168.1.8"
+        static let IP = "10.3.141.114"
         static let URL = "http://" + IP + ":8080/api"
 
     }

@@ -27,22 +27,24 @@ class RoomViewController: UITableViewController{
         getRooms()
     }
     
-    @objc func refreshAfterPush(_ sender: AnyObject) {
-        self.getRooms()
-    }
-
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         getRooms()
     }
     
-    
-    @IBAction func switchStateTapped(_ sender: Any) {
-        self.changeRoomState()
+    @objc func refreshAfterPush(_ sender: AnyObject) {
+        self.getRooms()
+    }
+
+    func refreshTableView(){
+        getRooms()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3){
+            self.tableView.reloadData()
+            self.tableView.refreshControl?.endRefreshing()
+        }
     }
     
-   
+
     private func getRooms(){
         print("Perform get rooms")
         
@@ -79,11 +81,11 @@ class RoomViewController: UITableViewController{
         }
     }
     
-    private func changeRoomState(){
+    private func changeRoomState(id: Int){
         print("Perform Change Room State")
         
         //fire off a login request to server of localhost
-        guard let url = URL(string: Constants.Api.URL + "/lamp/toggleRoom") else {return}
+        guard let url = URL(string: Constants.Api.URL + "/lamp/toggleRoom/" + String(id)) else {return}
         var request = URLRequest(url:  url)
         request.setValue("application/json", forHTTPHeaderField: "Content-type")
         request.httpMethod = "POST"
@@ -99,14 +101,11 @@ class RoomViewController: UITableViewController{
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                     //self.getLamps()
                 }
-                
-                
             } else {
                 print("The toogle went wrong")
             }
             
             }.resume() //never forget this resume
-       
     }
     
     
@@ -139,12 +138,10 @@ class RoomViewController: UITableViewController{
     }
     
     @objc func switchChanged(_ sender: UISwitch!){
-        /*print(sender.tag)
-        let id = arrayLamps[sender.tag].id
-        let stringId = String(id)
-        
-        changeStateById(id: stringId)
-        refreshTableView()*/
+        print(sender.tag)
+        let id = arrayRooms[sender.tag].id
+        self.changeRoomState(id: id)
+        self.refreshTableView()
     }
     
     override func didReceiveMemoryWarning() {
