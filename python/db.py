@@ -6,7 +6,7 @@ from enum import Enum
 
 class INSERT(Enum):
     GESTURE = "INSERT OR REPLACE INTO gestures (id, name, action) VALUES (?,?,?)"
-    LAMP = "INSERT OR REPLACE INTO lamps (id, ip) VALUES (?,?)"
+    LAMP = "INSERT OR REPLACE INTO lamps (id, ip, state) VALUES (?,?,?)"
 
 
 class DB(object):
@@ -21,7 +21,7 @@ class DB(object):
             "CREATE UNIQUE INDEX IF NOT EXISTS gestures_idx ON gestures (id)")
 
         self.__cursor.execute(
-            "CREATE TABLE IF NOT EXISTS lamps (id text, ip text)")
+            "CREATE TABLE IF NOT EXISTS lamps (id text, ip text, state integer)")
         self.__cursor.execute(
             "CREATE UNIQUE INDEX IF NOT EXISTS lamps_idx ON lamps (id)")
 

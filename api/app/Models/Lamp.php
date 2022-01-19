@@ -12,9 +12,14 @@ class Lamp extends Model
     protected $fillable = [
         'name',
         'state',
-        'mac_address',
         'ip',
+        'room_id',
+        'mac_address',
         'bulb_id',
         'last_up_state'
     ];
+
+    public function room(){
+        return $this->belongsTo('App\Room');
+    }
 }
