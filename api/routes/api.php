@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LampController;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\GestureController;
 use App\Http\Controllers\UpstateController;
 use App\Http\Controllers\UptimeController;
@@ -36,13 +37,15 @@ Route::post('/login', [AuthController::class, 'login']);
     //Route::patch('lamp/{id}/state/{state}', [LampController::class, 'changeState']);
     Route::post('lamp/{id}/toggle', [LampController::class, 'changeStateByID']);
     Route::post('lamp/toggleAll', [LampController::class, 'changeStateForAll']);
+    Route::post('lamp/toggleRoom/{id}', [LampController::class, 'changeStateForAllInTheRoom']);
     Route::post('/gesture', [GestureController::class, 'create']);
     Route::get('/gesture/{name}', [GestureController::class, 'getActionByGestureName']); 
     Route::get('/gestures', [GestureController::class, 'getGestures']);
     Route::patch('/gesture/{id}/action', [GestureController::class, 'updateGestureActionById']);
     Route::get('/uptimes/lastDay', [UptimeController::class, 'getYesterdayEnergyInfo']); //DigitalTwin
     Route::get('/uptimes/totalUptime/{id}', [UptimeController::class, 'getTotalUptimeById']); //DigitalTwin
-    
+    Route::post('/room', [RoomController::class, 'create']);
+    Route::get('/rooms', [RoomController::class, 'getRooms']);
     Route::get('/sync/gestures', [SyncController::class, 'gestures']);
     Route::get('/sync/lamps', [SyncController::class, 'lamps']);
     
