@@ -27,25 +27,31 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // Protected routes
 //Route::group(['middleware' => ['auth:sanctum']], function () {
+    
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/lamp', [LampController::class, 'create']);
     Route::delete('/lamp/{id}', [LampController::class, 'delete']);
     Route::put('/lamp/{id}', [LampController::class, 'update']);
-    Route::get('lamp/{id}', [LampController::class, 'getLampById']);
-    Route::get('lamps' , [LampController::class, 'getLamps']);
-    Route::patch('lamp/{id}/ip', [LampController::class, 'postIp']);
+    Route::get('/lamp/{id}', [LampController::class, 'getLampById']);
+    Route::get('/lamps' , [LampController::class, 'getLamps']);
+    Route::patch('/lamp/{id}/ip', [LampController::class, 'postIp']);
     //Route::patch('lamp/{id}/state/{state}', [LampController::class, 'changeState']);
-    Route::post('lamp/{id}/toggle', [LampController::class, 'changeStateByID']);
-    Route::post('lamp/toggleAll', [LampController::class, 'changeStateForAll']);
-    Route::post('lamp/toggleRoom/{id}', [LampController::class, 'changeStateForAllInTheRoom']);
+    Route::post('/lamp/{id}/toggle', [LampController::class, 'changeStateByID']);
+    Route::post('/lamp/toggleAll', [LampController::class, 'changeStateForAll']);
+
+
     Route::post('/gesture', [GestureController::class, 'create']);
     Route::get('/gesture/{name}', [GestureController::class, 'getActionByGestureName']); 
     Route::get('/gestures', [GestureController::class, 'getGestures']);
     Route::patch('/gesture/{id}/action', [GestureController::class, 'updateGestureActionById']);
-    Route::get('/uptimes/lastDay', [UptimeController::class, 'getYesterdayEnergyInfo']); //DigitalTwin
-    Route::get('/uptimes/totalUptime/{id}', [UptimeController::class, 'getTotalUptimeById']); //DigitalTwin
+    
     Route::post('/room', [RoomController::class, 'create']);
     Route::get('/rooms', [RoomController::class, 'getRooms']);
+    Route::post('/room/toggle/{id}', [RoomController::class, 'changeStateForAllInTheRoom']);
+
+    Route::get('/uptimes/lastDay', [UptimeController::class, 'getYesterdayEnergyInfo']); //DigitalTwin
+    Route::get('/uptimes/totalUptime/{id}', [UptimeController::class, 'getTotalUptimeById']); //DigitalTwin
+
     Route::get('/sync/gestures', [SyncController::class, 'gestures']);
     Route::get('/sync/lamps', [SyncController::class, 'lamps']);
     

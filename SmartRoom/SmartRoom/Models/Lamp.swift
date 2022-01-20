@@ -11,7 +11,7 @@ struct Lamp: Decodable, Equatable{
     var id : Int
     var ip : String
     var name : String
-    var roomId: Int
+    var roomId: Int?
     var state : Bool
     
     static func ==(lhs: Lamp, rhs: Lamp) -> Bool{

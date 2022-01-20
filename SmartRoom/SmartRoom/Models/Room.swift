@@ -11,6 +11,7 @@ import Foundation
 struct Room: Decodable, Equatable{
     var id : Int
     var state : Bool
+    var name : String?
     
     static func ==(lhs: Room, rhs: Room) -> Bool{
         return lhs.id == rhs.id

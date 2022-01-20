@@ -19,7 +19,7 @@ class GesturesViewController: UITableViewController{
         tableView.refreshControl = UIRefreshControl()
         // add target to UIRefreshControl
         tableView.refreshControl?.addTarget(self, action: #selector(refreshAfterPush(_:)), for: .valueChanged)
-        
+        self.tableView.refreshControl?.beginRefreshing()
         getGestures()
     }
     
@@ -30,7 +30,6 @@ class GesturesViewController: UITableViewController{
     
     
     func getGestures(){
-        self.tableView.refreshControl?.beginRefreshing()
         print("Perform Get Gestures")
         
         //fire off a login request to server of localhost

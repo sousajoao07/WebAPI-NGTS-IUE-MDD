@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Lamp;
+use App\Models\Room;
 use App\Models\Uptime;
 use App\Models\Upstate;
 use App\Http\Resources\LampResource;
+use App\Http\Resources\RoomResource;
 use Illuminate\Support\Facades\Validator;
 use Hhxsv5\SSE\SSE;
 use Hhxsv5\SSE\Event;
@@ -16,10 +18,6 @@ use Carbon\Carbon;
 
 class LampController extends Controller
 {
-    //passos para criar:
-    //app yeelight criar a lampada, obter o ip manualmente
-    //criar lampada inserindo esse ip
-    //evento despuletado no rasp para ele conhecer a lampada
     public function create(Request $request)
     {
         $fields = $request->validate([
@@ -42,7 +40,7 @@ class LampController extends Controller
         return response($response, 201);
     }
 
-    public function delete(Request $request, $id){
+    public function delete($id){
         $lamp = Lamp::findOrFail($id);
         $lamp->delete();
 
@@ -107,58 +105,31 @@ class LampController extends Controller
         }
 
         $lamp->save();
+
+        $arrayLamps = LampResource::collection(Lamp::where('room_id', $lamp->room_id)->get());
+
+        $count = 0;
+        foreach($arrayLamps as $lamp){           
+            if($lamp->state == true){
+                $count ++;
+            }
+        }
+
+        $room = Room::findOrFail($lamp->room_id);
+        if($count == 0){
+            $room->state = false;
+        }else{          
+            $room->state = true;
+        }
+
+        $room->save();
+
         return response($lamp, 200);
     }
 
     public function changeStateForAll(){
 
         $arrayLamps = LampResource::collection(Lamp::all());
-        $state = null;
-
-        foreach ($arrayLamps as $lamp){
-            if($lamp['state'] == true){
-                $state = true; // estado geral, basta uma lamp ter luz ligada
-            }
-        }
-        if($state == true){
-            foreach($arrayLamps as $lamp){
-                if($lamp['state'] == $state){ // Significa que esta luz está a fazer com que a sala esteja com o estado de luz ligada
-
-                    $currentTime = Carbon::now();
-                    $lastUpState = $lamp['last_up_state'];
-                    $lamp['state'] = false;
-                    $lamp->save();
-
-                    $t1 = Carbon::parse($lastUpState);
-                    $t2 = Carbon::parse($currentTime);
-                    $difference = $t1->diff($t2);
-
-                    $diffInSeconds = $difference->s; //45
-                    $diffInMinutes = $difference->i; //23
-                    $diffInHours   = $difference->h; //8
-                    $diffInDays    = $difference->d; //21
-
-                    $stringTime = $diffInHours . ":" . $diffInMinutes . ":" . $diffInSeconds;
-                    Uptime::create(['lamp_id' =>  $lamp['id'], 'time' => $stringTime]);
-                }
-            }
-        } else {
-            foreach($arrayLamps as $lamp){
-                $currentTime = Carbon::now();
-                $lamp['state'] = true;
-                $lamp['last_up_state'] = $currentTime;
-                $lamp->save();
-                Upstate::create(['lamp_id' => $lamp['id']]);
-            }
-        }
-
-        return response($arrayLamps, 200);
-    }
-
-
-    public function changeStateForAllInTheRoom(Request $request, $id){
-
-        $arrayLamps = LampResource::collection(Lamp::where('room_id', $id)->get());
         $state = null;
 
         foreach ($arrayLamps as $lamp){

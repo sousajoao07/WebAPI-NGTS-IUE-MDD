@@ -10,12 +10,9 @@ import UIKit
 
 class RoomViewController: UITableViewController{
     
-    var arrayLamps = [Lamp]()
     var arrayRooms = [Room]()
     var roomState: Bool? = false
-    var bulbNumber: Int = 0
-    
-    
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -24,16 +21,24 @@ class RoomViewController: UITableViewController{
         // add target to UIRefreshControl
         tableView.refreshControl?.addTarget(self, action: #selector(refreshAfterPush(_:)), for: .valueChanged)
         
-        getRooms()
+        self.tableView.refreshControl?.beginRefreshing()
+        refreshTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         getRooms()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3){
+            self.tableView.reloadData()
+        }
     }
     
     @objc func refreshAfterPush(_ sender: AnyObject) {
-        self.getRooms()
+        getRooms()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3){
+            self.tableView.reloadData()
+            self.tableView.refreshControl?.endRefreshing()
+        }
     }
 
     func refreshTableView(){
@@ -66,10 +71,8 @@ class RoomViewController: UITableViewController{
                         print("Get rooms with success!")
                         let response = try JSONDecoder().decode([Room].self, from: data)
                         self.arrayRooms = response
+                        print(response)
 
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                        }
                         
                     } catch let parseError as NSError {
                         print("Error")
@@ -85,7 +88,7 @@ class RoomViewController: UITableViewController{
         print("Perform Change Room State")
         
         //fire off a login request to server of localhost
-        guard let url = URL(string: Constants.Api.URL + "/lamp/toggleRoom/" + String(id)) else {return}
+        guard let url = URL(string: Constants.Api.URL + "/room/toggle/" + String(id)) else {return}
         var request = URLRequest(url:  url)
         request.setValue("application/json", forHTTPHeaderField: "Content-type")
         request.httpMethod = "POST"
@@ -97,17 +100,16 @@ class RoomViewController: UITableViewController{
             } else if
                 let resp = resp as? HTTPURLResponse,
                 resp.statusCode == 200 {
+                    
+                    print("Room state changed")
+                    
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    //self.getLamps()
-                }
             } else {
                 print("The toogle went wrong")
             }
             
             }.resume() //never forget this resume
     }
-    
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrayRooms.count
@@ -121,10 +123,10 @@ class RoomViewController: UITableViewController{
         
         let room = arrayRooms[indexPath.row]
         cell.selectionStyle = .none
-        //cell.labelState?.text = lamp.state == true ? "On" : "Off"
+        cell.labelLampNumbers.text = room.name
         cell.labelState.text = room.state == true ? "On" : "Off"
         cell.button.isOn = room.state
-        cell.button.tag = indexPath.row
+        cell.button.tag = room.id
         cell.button.onTintColor = UIColor.init(red: 0/255, green: 122/255, blue: 255/255, alpha: 1)
         
         cell.button.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
@@ -137,16 +139,16 @@ class RoomViewController: UITableViewController{
         return 150 //or whatever you need
     }
     
+   tableView
+    
     @objc func switchChanged(_ sender: UISwitch!){
         print(sender.tag)
-        let id = arrayRooms[sender.tag].id
+        let id = sender.tag
         self.changeRoomState(id: id)
-        self.refreshTableView()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4){
+            self.refreshTableView()
+        }
     }
    
 }

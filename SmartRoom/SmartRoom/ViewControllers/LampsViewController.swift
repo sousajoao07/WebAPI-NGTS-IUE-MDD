@@ -31,10 +31,8 @@ class LampsViewController: UITableViewController, EventHandler {
         let eventSource = EventSource.init(config: config)
         eventSource.start()
         
-        
-        configureItems()
         tableView.refreshControl?.beginRefreshing()
-
+        getLamps()
         refreshTableView()
     }
     
@@ -47,52 +45,6 @@ class LampsViewController: UITableViewController, EventHandler {
         DispatchQueue.main.async {
             self.tableView.reloadData()
             self.tableView.refreshControl?.endRefreshing()
-        }
-    }
-    
-    private func configureItems(){
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "Logout",
-            style: .done,
-            target: self,
-            action: #selector(didTapButton(sender:))
-        )
-    }
-    
-    @objc func didTapButton(sender: UIBarButtonItem){
-        print("Logout tapped")
-        self.cleanCredentials()
-        self.transitionToHomeNavigationController()
-    }
-    
-    private func cleanCredentials(){
-        do{
-            try KeychainInterface.delete(service: "email", account: "laravelApi")
-            try KeychainInterface.delete(service: "access-token", account: "laravelApi")
-            try KeychainInterface.delete(service: "password", account: "laravelApi")
-            
-        } catch {
-            print("Error delete the data on Keychain")
-        }
-        print("User logged out")
-    }
-    
-    private func transitionToHomeNavigationController(){
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let loginNavController = storyboard.instantiateViewController(withIdentifier: "LoginNavigationController")
-
-        (UIApplication.shared.delegate as? AppDelegate)?.changeRootViewController(loginNavController)
-    }
-    
-    func readToken()->String?{
-        do{
-            let dataToken = try KeychainInterface.read(service: "access-token", account: "laravelApi")
-            let token = String(data: dataToken, encoding: .utf8)!
-            print(token)
-            return token
-        } catch {
-            print("Token is null")
-            return nil
         }
     }
     
@@ -193,7 +145,9 @@ class LampsViewController: UITableViewController, EventHandler {
         let stringId = String(id)
         
         changeStateById(id: stringId)
-        refreshTableView()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4){
+            self.refreshTableView()
+        }
     }
     
     func onOpened() {

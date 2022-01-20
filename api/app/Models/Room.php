@@ -10,7 +10,8 @@ class Room extends Model
     use HasFactory;
 
     protected $fillable = [
-        'state'
+        'state',
+        'name'
     ];
 
     public function lamp(){
