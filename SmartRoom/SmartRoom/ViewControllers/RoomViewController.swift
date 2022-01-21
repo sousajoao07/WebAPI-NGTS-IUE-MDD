@@ -84,11 +84,11 @@ class RoomViewController: UITableViewController{
         }
     }
     
-    private func changeRoomState(id: Int){
+    private func changeRoomState(id: Int, state: Bool){
         print("Perform Change Room State")
         
         //fire off a login request to server of localhost
-        guard let url = URL(string: Constants.Api.URL + "/room/toggle/" + String(id)) else {return}
+        guard let url = URL(string: Constants.Api.URL + "/room/toggle/" + String(id) + "/" + String(state)) else {return}
         var request = URLRequest(url:  url)
         request.setValue("application/json", forHTTPHeaderField: "Content-type")
         request.httpMethod = "POST"
@@ -139,12 +139,11 @@ class RoomViewController: UITableViewController{
         return 150 //or whatever you need
     }
     
-   tableView
-    
     @objc func switchChanged(_ sender: UISwitch!){
         print(sender.tag)
         let id = sender.tag
-        self.changeRoomState(id: id)
+        let state = !roomState!
+        self.changeRoomState(id: id, state: state)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 4){
             self.refreshTableView()

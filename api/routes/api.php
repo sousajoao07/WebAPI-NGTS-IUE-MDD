@@ -38,6 +38,7 @@ Route::post('/login', [AuthController::class, 'login']);
     //Route::patch('lamp/{id}/state/{state}', [LampController::class, 'changeState']);
     Route::post('/lamp/{id}/toggle', [LampController::class, 'changeStateByID']);
     Route::post('/lamp/toggleAll', [LampController::class, 'changeStateForAll']);
+    Route::post('/lamp/{id}/room/{roomId}', [LampController::class, 'changeRoom']);
 
 
     Route::post('/gesture', [GestureController::class, 'create']);
@@ -47,13 +48,15 @@ Route::post('/login', [AuthController::class, 'login']);
     
     Route::post('/room', [RoomController::class, 'create']);
     Route::get('/rooms', [RoomController::class, 'getRooms']);
-    Route::post('/room/toggle/{id}', [RoomController::class, 'changeStateForAllInTheRoom']);
+    Route::post('/room/toggle/{id}/{state}', [RoomController::class, 'changeStateForAllInTheRoom']);
+    
 
     Route::get('/uptimes/lastDay', [UptimeController::class, 'getYesterdayEnergyInfo']); //DigitalTwin
     Route::get('/uptimes/totalUptime/{id}', [UptimeController::class, 'getTotalUptimeById']); //DigitalTwin
 
     Route::get('/sync/gestures', [SyncController::class, 'gestures']);
     Route::get('/sync/lamps', [SyncController::class, 'lamps']);
+    Route::get('/sync/ios', [SyncController::class, 'ios']);
     
 
 //});

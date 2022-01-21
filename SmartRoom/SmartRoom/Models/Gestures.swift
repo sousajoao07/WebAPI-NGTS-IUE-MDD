@@ -16,7 +16,7 @@ struct Gesture: Decodable{
 
 enum Action: Decodable {
     
-    case turn_on, turn_off, increase_light, decrease_ligh, next_color, previous_color, disco_flow
+    case turn_on, turn_off, increase_light, decrease_ligh, next_color, previous_color
     case unknown(value: String)
     
     init(from decoder: Decoder) throws {
@@ -29,7 +29,6 @@ enum Action: Decodable {
         case "decrease_light": self = .decrease_ligh
         case "next_color": self = .next_color
         case "previous_color": self = .previous_color
-        case "disco_flow": self = .disco_flow
         default:
             self = .unknown(value: action ?? "unknown")
         }

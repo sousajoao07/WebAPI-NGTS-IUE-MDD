@@ -45,9 +45,9 @@ class GestureSeeder extends Seeder
             'action' => 'previous_color',
         ]);
         
-        Gesture::create([
-            'name' => 'Wave',
-            'action' => 'disco_flow',
-        ]);
+        // Gesture::create([
+        //     'name' => 'Wave',
+        //     'action' => 'disco_flow',
+        // ]);
     }
 }

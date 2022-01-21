@@ -36,13 +36,36 @@ class RoomController extends Controller
     }
 
     public function getRooms(){
-        return response(RoomResource::collection(Room::orderBy('id', 'ASC')->get()));
+        $lamps = Room::with('lamps')->orderBy('id', 'ASC')->get();
+        
+        $aux = [];
+        foreach ($lamps as $lamp) {
+
+            $tem = $lamp->lamps->every(function ($value) {
+                return $value->state == 0;
+            });
+
+            $a = $lamp->toArray();
+            if ($tem) {
+                $a['state'] = false;
+            } else if (!$tem && $lamp->state == 1) {
+                $a['state'] = true;
+            }
+            unset($a['lamps']);
+
+            array_push($aux, $a);
+        }
+        return response($aux);
     }
 
-    public function changeStateForAllInTheRoom(Request $request, $id){
+    public function changeStateForAllInTheRoom(Request $request, $id, $state){
 
-        $arrayLamps = LampResource::collection(Lamp::where('room_id', $id)->get());
         $room = Room::findOrFail($id);
+        $room->state = (Bool)$state;
+        $room->save();
+
+        $arrayLamps = Lamp::where('room_id', $id)->get();
+       
 
         $state = null;
 
@@ -84,13 +107,9 @@ class RoomController extends Controller
         }
 
        
-        if($room->state == true){
-            $room->state = false;
-            $room->save();
-        }else{
-            $room->state = true;
-            $room->save();
-        }
+
+        
+        
 
         return response($room, 200);
     }

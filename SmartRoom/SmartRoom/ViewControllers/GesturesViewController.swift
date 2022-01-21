@@ -121,7 +121,6 @@ class GesturesViewController: UITableViewController{
         case .decrease_ligh: actionString = "Decrease Light"
         case .next_color: actionString = "Next Color"
         case .previous_color: actionString = "Previous Color"
-        case .disco_flow: actionString = "Disco Flow"
         case .unknown(_):
             actionString = ""
         }

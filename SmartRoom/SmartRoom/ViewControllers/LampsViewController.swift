@@ -31,7 +31,6 @@ class LampsViewController: UITableViewController, EventHandler {
         let eventSource = EventSource.init(config: config)
         eventSource.start()
         
-        tableView.refreshControl?.beginRefreshing()
         getLamps()
         refreshTableView()
     }
@@ -137,6 +136,21 @@ class LampsViewController: UITableViewController, EventHandler {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
         return 150 //or whatever you need
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        if let indexPath = tableView.indexPathForSelectedRow {
+            guard let destinationVC = segue.destination as? LampRoomViewController else {return}
+            let selectedRow = indexPath.row
+            destinationVC.lampId = arrayLamps[selectedRow].id
+            destinationVC.roomId = arrayLamps[selectedRow].roomId
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "SegueToSelectRoom", sender: indexPath.row)
+        
     }
     
     @objc func switchChanged(_ sender: UISwitch!){

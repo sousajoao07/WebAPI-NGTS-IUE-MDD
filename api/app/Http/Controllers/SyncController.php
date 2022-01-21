@@ -19,7 +19,7 @@ class SyncController extends Controller
             $lastUpdate = null;
 
             $callback = function () use (&$lastUpdate) {
-                $gestures = DB::table('gestures')->when($lastUpdate, function ($query, $lastUpdate) {
+                $gestures = DB::table('gestures')->when($lastUpdate, function ($query) use ($lastUpdate) {
                     return $query->whereDate('updated_at', '>=', $lastUpdate->toDateString())
                         ->whereTime('updated_at', '>', $lastUpdate->toTimeString());
                 })->get();
@@ -51,13 +51,55 @@ class SyncController extends Controller
             $lastUpdate = null;
 
             $callback = function () use (&$lastUpdate) {
-                $lamps = DB::table('lamps')->when($lastUpdate, function ($query, $lastUpdate){
+                $lamps = DB::table('lamps')->when($lastUpdate, function ($query) use ($lastUpdate) {
                     return $query->whereDate('updated_at', '>=', $lastUpdate->toDateString())
                         ->whereTime('updated_at', '>', $lastUpdate->toTimeString());
-                })->get();
+                })->select([
+                    'bulb_id AS id', 
+                    'ip', 
+                    'state'
+                ])->get();
 
                 if (empty($lamps)) {
-                    return json_encode([]);
+                    return false;
+                }
+
+                $shouldStop = false;
+                if ($shouldStop) {
+                    throw new StopSSEException();
+                }
+
+                $lastUpdate = Carbon::now();
+
+                return json_encode($lamps);
+            };
+            (new SSE(new Event($callback)))->start();
+        });
+
+        return $response;
+    }
+
+    public function ios()
+    {
+        $response = $this->newStreamedResponse();
+
+        $response->setCallback(function () {
+            $lastUpdate = null;
+
+            $callback = function () use (&$lastUpdate) {
+                $lamps = DB::table('lamps')->when($lastUpdate, function ($query) use ($lastUpdate) {
+                    return $query->whereDate('updated_at', '>=', $lastUpdate->toDateString())
+                        ->whereTime('updated_at', '>', $lastUpdate->toTimeString());
+                })->select([
+                    'id', 
+                    'ip', 
+                    'state', 
+                    'name', 
+                    'room_id as roomId'
+                ])->get();
+
+                if (empty($lamps)) {
+                    return false;
                 }
 
                 $shouldStop = false;

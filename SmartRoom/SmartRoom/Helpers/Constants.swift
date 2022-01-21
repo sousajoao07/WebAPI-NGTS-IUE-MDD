@@ -13,7 +13,7 @@ struct Constants {
         
         static let IP = "localhost"
         static let URL = "http://\(IP):8080/api"
-        static let SYNC = "\(URL)/sync/lamps"
+        static let SYNC = "\(URL)/sync/ios"
     }
     
     struct Storyboard{

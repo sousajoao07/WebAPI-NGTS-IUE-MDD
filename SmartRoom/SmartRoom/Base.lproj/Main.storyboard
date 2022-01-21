@@ -6,6 +6,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -281,7 +282,7 @@
         <scene sceneID="4xz-ed-gqU">
             <objects>
                 <tableViewController id="SU6-ch-icV" customClass="LampsViewController" customModule="SmartRoom" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Sce-yw-p5V">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Sce-yw-p5V">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -357,10 +358,60 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Lamps" id="Q7y-Gg-4IR"/>
+                    <connections>
+                        <segue destination="Mje-LL-kBb" kind="show" identifier="SegueToSelectRoom" id="1pL-Xl-ucG"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="duj-C0-s33" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1960.8695652173915" y="-2646.4285714285711"/>
+        </scene>
+        <!--Lamp Room View Controller-->
+        <scene sceneID="5yV-g4-izP">
+            <objects>
+                <viewController id="Mje-LL-kBb" customClass="LampRoomViewController" customModule="SmartRoom" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="BWb-QV-wFk">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Q46-dO-d8c">
+                                <rect key="frame" x="40" y="108" width="334" height="407"/>
+                                <subviews>
+                                    <pickerView contentMode="scaleToFill" verticalHuggingPriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="Wku-ys-Ya2">
+                                        <rect key="frame" x="0.0" y="0.0" width="334" height="364"/>
+                                        <connections>
+                                            <outlet property="dataSource" destination="Mje-LL-kBb" id="Bth-JZ-r0Q"/>
+                                            <outlet property="delegate" destination="Mje-LL-kBb" id="umA-13-AGn"/>
+                                        </connections>
+                                    </pickerView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fem-fa-C7y">
+                                        <rect key="frame" x="0.0" y="364" width="334" height="43"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Save">
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="24"/>
+                                        </buttonConfiguration>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="1Lc-hM-gCa"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Q46-dO-d8c" firstAttribute="leading" secondItem="1Lc-hM-gCa" secondAttribute="leading" constant="40" id="TrL-3o-MxX"/>
+                            <constraint firstItem="1Lc-hM-gCa" firstAttribute="bottom" secondItem="Q46-dO-d8c" secondAttribute="bottom" constant="298" id="Uxl-yf-u93"/>
+                            <constraint firstItem="1Lc-hM-gCa" firstAttribute="trailing" secondItem="Q46-dO-d8c" secondAttribute="trailing" constant="40" id="XNd-Vo-7Lv"/>
+                            <constraint firstItem="Q46-dO-d8c" firstAttribute="top" secondItem="1Lc-hM-gCa" secondAttribute="top" constant="20" id="jIl-Vf-ysS"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="yDZ-Pd-UL9"/>
+                    <connections>
+                        <outlet property="picker" destination="Wku-ys-Ya2" id="fMO-1n-b2L"/>
+                        <outlet property="saveButton" destination="fem-fa-C7y" id="cNP-94-zBf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bg7-qd-akQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2934.7826086956525" y="-2646.4285714285711"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Y7j-nF-k32">
@@ -596,7 +647,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xox-FX-6w3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2846" y="-1142"/>
+            <point key="canvasLocation" x="2845" y="-1142"/>
         </scene>
         <!--Profile-->
         <scene sceneID="ftr-6Z-jQH">
@@ -685,5 +736,8 @@
         <image name="person.crop.circle.fill" catalog="system" width="128" height="121"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="profileImage" width="980" height="982"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

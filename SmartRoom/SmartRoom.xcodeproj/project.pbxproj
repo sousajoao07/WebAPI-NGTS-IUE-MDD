@@ -29,6 +29,7 @@
 		67CC7D9D277D1142003A563F /* KeychainInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CC7D9C277D1142003A563F /* KeychainInterface.swift */; };
 		67E5134227974F9A00AA7C62 /* Room.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E5134127974F9A00AA7C62 /* Room.swift */; };
 		67E5134427974FA900AA7C62 /* RoomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E5134327974FA900AA7C62 /* RoomCell.swift */; };
+		67F77472279A007D009F3CBB /* LampRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F77471279A007D009F3CBB /* LampRoomViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		67CC7D9C277D1142003A563F /* KeychainInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainInterface.swift; sourceTree = "<group>"; };
 		67E5134127974F9A00AA7C62 /* Room.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Room.swift; sourceTree = "<group>"; };
 		67E5134327974FA900AA7C62 /* RoomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCell.swift; sourceTree = "<group>"; };
+		67F77471279A007D009F3CBB /* LampRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LampRoomViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 				67810B56278F81F700EAB47D /* ProfileViewController.swift */,
 				67B8A5CF2790F6E400C1ADE3 /* ActionsViewController.swift */,
 				6798D9B527941463007F1D35 /* RoomViewController.swift */,
+				67F77471279A007D009F3CBB /* LampRoomViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -239,6 +242,7 @@
 				67B8A5D22791001F00C1ADE3 /* Gestures.swift in Sources */,
 				67810B57278F81F700EAB47D /* ProfileViewController.swift in Sources */,
 				67CC7D9D277D1142003A563F /* KeychainInterface.swift in Sources */,
+				67F77472279A007D009F3CBB /* LampRoomViewController.swift in Sources */,
 				67B0386A2772B4B2008219D1 /* GesturesViewController.swift in Sources */,
 				6798D9B627941463007F1D35 /* RoomViewController.swift in Sources */,
 				67745558277A75FB0037080F /* Utilities.swift in Sources */,

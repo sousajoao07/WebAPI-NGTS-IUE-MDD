@@ -17,7 +17,7 @@ class ActionsViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     @IBOutlet weak var saveButton: UIButton!
     
     
-    var ArrayOfActions = ["Turn On", "Turn Off", "Increase Light", "Decrease Light", "Next Color", "Previous Color", "Disco Flow"]
+    private var ArrayOfActions = ["Turn On", "Turn Off", "Increase Light", "Decrease Light", "Next Color", "Previous Color"]
     
     var pickerData: [String] = [String]()
     var itemAtDefaultName: String = String.init()
@@ -94,7 +94,6 @@ class ActionsViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         case "Decrease Light" : actionString = "decrease_light"
         case "Next Color": actionString = "next_color"
         case "Previous Color" : actionString = "previous_color"
-        case "Disco Flow" : actionString = "disco_flow"
         default:
             actionString = String.init()
         }

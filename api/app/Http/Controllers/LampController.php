@@ -15,23 +15,22 @@ use Hhxsv5\SSE\SSE;
 use Hhxsv5\SSE\Event;
 use Hhxsv5\SSE\StopSSEException;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class LampController extends Controller
 {
     public function create(Request $request)
     {
-        $fields = $request->validate([
-                'ip' => 'required|string',
-            ]);
+        $fields = $request->all();
 
-        if (isset($fields['bulb_id'])) {
-            $lamp = Lamp::updateOrCreate(
-                ['bulb_id' =>  $fields['bulb_id']],
-                ['ip' => $fields['ip']]
-            );
-        } else {
-            $lamp = Lamp::create(['ip' => $fields['ip']]);
-        }
+        $lamp = Lamp::updateOrCreate(
+            ['bulb_id' =>  $fields['id']],
+            [
+                'ip' => $fields['ip'],
+                'state' => $fields['state'],
+                'name' => 'Lamp ' . Str::random(2)
+            ]
+        );
 
         $response = [
             'lamp' => $lamp,
@@ -177,23 +176,32 @@ class LampController extends Controller
     }
 
     public function getLamps(){
-        return response(LampResource::collection(Lamp::orderBy('id', 'ASC')->get()));
+        return response(Lamp::orderBy('name', 'ASC')->select(['id', 'ip', 'state', 'name', 
+        'room_id as roomId'])->get());
+
     }
 
-    public function postIp(Request $request, $id)
-    {
-        $fields = $request->validate([
-            'ip' => 'required|string']
-        );
+    // public function postIp(Request $request, $id)
+    // {
+    //     $fields = $request->validate([
+    //         'ip' => 'required|string']
+    //     );
 
-        $lamp = Lamp::findOrFail($id);
-        if($lamp) {
-            $lamp->ip = $fields['ip'];
-            $lamp->save();
-        }
-        else{
-            response(null, 400);
-        }
+    //     $lamp = Lamp::findOrFail($id);
+    //     if($lamp) {
+    //         $lamp->ip = $fields['ip'];
+    //         $lamp->save();
+    //     }
+    //     else{
+    //         response(null, 400);
+    //     }
+
+    //     return response(null, 200);
+    // }
+
+    public function changeRoom($id, $roomId){
+        $lamp = Lamp::findoOrFail($id);
+        $lamp -> room_id = $roomId;
 
         return response(null, 200);
     }

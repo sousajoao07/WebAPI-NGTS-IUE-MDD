@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Lamp;
 
 class Room extends Model
 {
@@ -14,7 +15,7 @@ class Room extends Model
         'name'
     ];
 
-    public function lamp(){
-        return $this->hasMany('App\Lamp');
+    public function lamps(){
+        return $this->hasMany('App\Models\Lamp');
     }
 }
